@@ -2,8 +2,15 @@ import { AppShell, Header, Navbar, Text } from "@mantine/core";
 import Colors from "../../utils/Colors";
 import UserProfile from "../Generic/UserProfile";
 import Sidebar from "./Sidebar";
+import { useState } from "react";
+import Dashboard from "../Customer/Dashboard/Dashboard";
+import Questions from "../Customer/Questions/Questions";
+import TimeTable from "../Customer/TimeTable/TimeTable";
+import Notifications from "../Customer/Notifications/Notifications";
 
 function AppLayout() {
+  const [activeLink, setActiveLink] = useState(1);
+
   return (
     <>
       <AppShell
@@ -20,7 +27,7 @@ function AppLayout() {
             p="xs"
             bg={Colors.primary}
           >
-            <Sidebar />
+            <Sidebar activeLink={activeLink} setActiveLink={setActiveLink} />
           </Navbar>
         }
         header={
@@ -58,7 +65,15 @@ function AppLayout() {
           },
         })}
       >
-        <h1>Hi</h1>
+        {activeLink === 1 ? (
+          <Dashboard />
+        ) : activeLink === 2 ? (
+          <Questions />
+        ) : activeLink === 3 ? (
+          <TimeTable />
+        ) : activeLink === 4 ? (
+          <Notifications />
+        ) : null}
       </AppShell>
     </>
   );

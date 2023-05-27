@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import links from "./SidebarLinks";
 import Colors from "../../utils/Colors";
 
-const Sidebar = () => {
-  const [activeLink, setActiveLink] = useState(null);
-
+/* eslint-disable */
+const Sidebar = ({ activeLink, setActiveLink }) => {
   const handleLinkClick = (linkId) => {
     setActiveLink(linkId);
   };
@@ -19,6 +18,7 @@ const Sidebar = () => {
               ...styles.sidebarItem,
               background:
                 activeLink === link.id ? Colors.secondary : Colors.primary,
+              transition: "all 0.3s",
             }}
             onClick={() => handleLinkClick(link.id)}
           >
