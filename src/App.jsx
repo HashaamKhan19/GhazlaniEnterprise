@@ -1,9 +1,10 @@
 import "./App.css";
+import AppLayout from "./components/Layout";
 
 function App() {
   return (
     <>
-      <h1>Counter</h1>
+      <AppLayout />
     </>
   );
 }
