@@ -1,5 +1,7 @@
-import { AppShell, Header, Navbar } from "@mantine/core";
+import { AppShell, Header, Navbar, Text } from "@mantine/core";
 import Colors from "../../utils/Colors";
+import UserProfile from "../Generic/UserProfile";
+import Sidebar from "./Sidebar";
 
 function AppLayout() {
   return (
@@ -18,7 +20,7 @@ function AppLayout() {
             p="xs"
             bg={Colors.primary}
           >
-            {/* Navbar content */}
+            <Sidebar />
           </Navbar>
         }
         header={
@@ -28,7 +30,26 @@ function AppLayout() {
             bg={Colors.primary}
             style={{ borderWidth: 0 }}
           >
-            {/* Header content */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                padding: "0 20px",
+              }}
+            >
+              <Text
+                color={Colors.red}
+                style={{
+                  fontSize: 24,
+                  fontWeight: 600,
+                }}
+              >
+                Ghazlani Enterprise
+              </Text>
+              <UserProfile />
+            </div>
           </Header>
         }
         styles={() => ({
