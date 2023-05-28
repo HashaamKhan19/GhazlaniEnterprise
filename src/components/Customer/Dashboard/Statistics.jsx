@@ -1,10 +1,13 @@
 import { Box, Card, CardSection, Group, Stack, Text } from "@mantine/core";
 import React from "react";
-import Colors from "../../../../utils/Colors";
+import Colors from "../../../utils/Colors";
 import { BsBookHalf, BsFillCalendarDateFill } from "react-icons/bs";
 import { MdManageAccounts } from "react-icons/md";
+import { useMediaQuery } from "@mantine/hooks";
 
 const Statistics = () => {
+  const match500 = useMediaQuery("(max-width: 500px)");
+
   const data = [
     {
       id: 1,
@@ -27,9 +30,21 @@ const Statistics = () => {
   ];
 
   return (
-    <Group style={{ width: "100%", justifyContent: "space-between" }} mb={"xl"}>
+    <Group
+      style={{
+        width: "100%",
+        justifyContent: match500 ? "center" : "space-between",
+        flexDirection: match500 ? "column" : "row",
+      }}
+      mb={"xl"}
+    >
       {data.map((item) => (
-        <Card key={item.id} style={{ width: "30%" }} radius={"lg"}>
+        <Card
+          key={item.id}
+          style={{ width: match500 ? "100%" : "30%" }}
+          radius={"lg"}
+          marginBottom={match500 ? "1rem" : undefined}
+        >
           <CardSection bg={Colors.primary} p={"xs"}>
             <Group style={{ justifyContent: "space-between" }} p={"xs"}>
               <Stack gap={0}>

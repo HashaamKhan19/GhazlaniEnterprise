@@ -12,11 +12,11 @@ const UserProfile = () => {
   return (
     <div
       style={{
-        marginRight: match768 ? "4px" : "20px",
+        // marginRight: match768 ? "4px" : "20px",
         cursor: "pointer",
       }}
     >
-      <Menu width={120}>
+      <Menu width={120} position="bottom-end" withArrow>
         <Menu.Target>
           <Avatar radius="xl" src={"https://picsum.photos/200/300"} />
         </Menu.Target>
