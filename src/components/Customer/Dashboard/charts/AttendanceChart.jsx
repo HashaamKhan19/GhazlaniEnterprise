@@ -1,5 +1,6 @@
 import { Group, Paper, Text } from "@mantine/core";
 import ReactApexChart from "react-apexcharts";
+import Colors from "../../../../utils/Colors";
 
 /*eslint-disable*/
 const AttendanceChart = ({ colors, series, labels, lineColor }) => {
@@ -32,7 +33,7 @@ const AttendanceChart = ({ colors, series, labels, lineColor }) => {
       markers: {
         size: 0,
         colors: lineColor,
-        strokeColors: "#ffffff",
+        strokeColors: Colors.white,
         strokeWidth: 2,
       },
 
@@ -51,7 +52,7 @@ const AttendanceChart = ({ colors, series, labels, lineColor }) => {
       xaxis: {
         labels: {
           style: {
-            colors: "#000000",
+            colors: Colors.white,
             fontSize: "12px",
             fontFamily: "Urbanist",
             fontWeight: 600,
@@ -66,7 +67,7 @@ const AttendanceChart = ({ colors, series, labels, lineColor }) => {
         opposite: false,
         labels: {
           style: {
-            colors: "#000000",
+            colors: Colors.white,
             fontSize: "12px",
             fontFamily: "Urbanist",
             fontWeight: 600,
@@ -78,18 +79,9 @@ const AttendanceChart = ({ colors, series, labels, lineColor }) => {
   };
 
   return (
-    <Paper
-      bg={"#f6fafd"}
-      shadow="lg"
-      px="xxs"
-      withBorder
-      pb={"xxs"}
-      pt={"lg"}
-      radius="md"
-      h={430}
-    >
+    <Paper bg={Colors.primary} shadow="lg" pt={"lg"} radius="lg" h={430}>
       <Group position="apart" mb={"1rem"}>
-        <Text fw={500} pl={"1rem"}>
+        <Text fw={500} size={"xl"} pl={"1rem"} c={Colors.white}>
           Attendance Graph
         </Text>
       </Group>
