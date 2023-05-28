@@ -1,4 +1,12 @@
-import { AppShell, Header, Navbar, Text } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Drawer,
+  Header,
+  Navbar,
+  Stack,
+  Text,
+} from "@mantine/core";
 import Colors from "../../utils/Colors";
 import UserProfile from "../Generic/UserProfile";
 import Sidebar from "./Sidebar";
@@ -7,9 +15,13 @@ import Dashboard from "../Customer/Dashboard/Dashboard";
 import Questions from "../Customer/Questions/Questions";
 import TimeTable from "../Customer/TimeTable/TimeTable";
 import Notifications from "../Customer/Notifications/Notifications";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 function AppLayout() {
   const [activeLink, setActiveLink] = useState(1);
+  const [opened, { toggle }] = useDisclosure(false);
+
+  const match768 = useMediaQuery("(max-width: 768px)");
 
   return (
     <>
@@ -17,7 +29,7 @@ function AppLayout() {
         padding="md"
         navbar={
           <Navbar
-            width={{ base: 300 }}
+            width={{ base: match768 ? 0 : 300 }}
             style={{
               borderTopRightRadius: 20,
               borderWidth: 0,
@@ -26,6 +38,7 @@ function AppLayout() {
             height={"100vh"}
             p="xs"
             bg={Colors.primary}
+            hidden={match768}
           >
             <Sidebar activeLink={activeLink} setActiveLink={setActiveLink} />
           </Navbar>
@@ -43,18 +56,32 @@ function AppLayout() {
                 justifyContent: "space-between",
                 alignItems: "center",
                 width: "100%",
-                padding: "0 20px",
+                padding: match768 ? "0 10px" : "0 20px",
               }}
             >
-              <Text
-                color={Colors.red}
+              <div
                 style={{
-                  fontSize: 24,
-                  fontWeight: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
                 }}
               >
-                Ghazlani Enterprise
-              </Text>
+                <Burger
+                  color={Colors.white}
+                  opened={opened}
+                  onClick={toggle}
+                  hidden={!match768}
+                />
+                <Text
+                  color={Colors.red}
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 600,
+                  }}
+                >
+                  Ghazlani Enterprise
+                </Text>
+              </div>
               <UserProfile />
             </div>
           </Header>
@@ -75,6 +102,26 @@ function AppLayout() {
           <Notifications />
         ) : null}
       </AppShell>
+
+      <Drawer
+        opened={opened}
+        onClick={toggle}
+        overlayProps={{ opacity: 0.5, blur: 4 }}
+        size={300}
+        transitionProps={{
+          transition: "scale-x",
+          duration: 250,
+          timingFunction: "linear",
+        }}
+      >
+        <Stack>
+          <Sidebar
+            activeLink={activeLink}
+            setActiveLink={setActiveLink}
+            toggle={toggle}
+          />
+        </Stack>
+      </Drawer>
     </>
   );
 }

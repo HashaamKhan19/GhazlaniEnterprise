@@ -4,12 +4,15 @@ import { Avatar, Menu } from "@mantine/core";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiLogOutCircle } from "react-icons/bi";
 import Colors from "../../utils/Colors";
+import { useMediaQuery } from "@mantine/hooks";
 
 const UserProfile = () => {
+  const match768 = useMediaQuery("(max-width: 768px)");
+
   return (
     <div
       style={{
-        marginRight: "20px",
+        marginRight: match768 ? "4px" : "20px",
         cursor: "pointer",
       }}
     >
