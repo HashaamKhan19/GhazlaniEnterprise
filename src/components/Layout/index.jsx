@@ -36,7 +36,6 @@ function AppLayout() {
             }}
             my={"lg"}
             height={"100vh"}
-            p="xs"
             bg={Colors.primary}
             hidden={match768}
           >

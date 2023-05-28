@@ -79,7 +79,7 @@ const AttendanceChart = ({ colors, series, labels, lineColor }) => {
   };
 
   return (
-    <Paper bg={Colors.primary} shadow="lg" pt={"lg"} radius="lg" h={430}>
+    <Paper bg={Colors.primary} shadow="lg" pt={"lg"} radius="lg">
       <Group position="apart" mb={"1rem"}>
         <Text fw={500} size={"xl"} pl={"1rem"} c={Colors.white}>
           Attendance Graph
