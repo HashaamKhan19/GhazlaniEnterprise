@@ -10,8 +10,11 @@ import {
   Stack,
 } from "@mantine/core";
 import Colors from "../../utils/Colors";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   return (
     <div
       style={{
@@ -85,6 +88,9 @@ export default function SignUp() {
                   href="#"
                   size="lg"
                   style={{ color: Colors.secondary, textDecoration: "none" }}
+                  onClick={() => {
+                    navigate("/login");
+                  }}
                 >
                   sign in here
                 </Anchor>

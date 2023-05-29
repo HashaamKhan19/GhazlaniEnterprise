@@ -85,9 +85,9 @@ export default function Login() {
 
             <Group position="apart" mt="lg">
               <Anchor
-                // onClick={() => {
-                //   navigate('/forgotPassword')
-                // }}
+                onClick={() => {
+                  navigate("/resetPassword");
+                }}
                 href="#"
                 size="sm"
                 style={{ color: Colors.secondary, textDecoration: "none" }}
