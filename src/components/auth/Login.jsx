@@ -5,61 +5,110 @@ import {
   Paper,
   Title,
   Text,
-  Container,
   Group,
   Button,
-  Modal,
   Stack,
 } from "@mantine/core";
+import Colors from "../../utils/Colors";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   return (
-    <Container size={420} my={40}>
-      <Title align="center">Welcome back!</Title>
-      <Text color="dimmed" size="sm" align="center" mt={5}>
-        Do not have an account yet?{" "}
-        {/* <Link style={{ textDecoration: 'none' }} to="/register"> */}
-        <Anchor
-          href="#"
-          size="sm"
-          style={{ color: "#D92228", textDecoration: "none" }}
+    <div
+      style={{
+        backgroundColor: Colors.main,
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Stack>
+        <Title align="center" c={Colors.white}>
+          Welcome back to
+          <Text c={Colors.red}>Ghazlani Enterprise</Text>
+        </Title>
+        <Text color="dimmed" size="lg" align="center" mt={5}>
+          Do not have an account yet?{" "}
+          <Anchor
+            href="#"
+            size="sm"
+            style={{ color: Colors.secondary, textDecoration: "none" }}
+            onClick={() => {
+              navigate("/register");
+            }}
+          >
+            Create account
+          </Anchor>
+        </Text>
+
+        <Paper
+          p={"xl"}
+          mt={"xl"}
+          radius="lg"
+          bg={Colors.primary}
+          style={{
+            width: "420px",
+            height: "auto",
+          }}
         >
-          Create account
-        </Anchor>
-        {/* </Link> */}
-      </Text>
-
-      <Paper
-        withBorder
-        shadow="md"
-        p={30}
-        mt={30}
-        radius="md"
-        style={{ borderColor: "lightgrey" }}
-      >
-        <form>
-          <Stack spacing={"xl"}>
-            <TextInput label="Email" placeholder="hello@gmail.com" />
-            <PasswordInput label="Password" placeholder="Your password" />
-          </Stack>
-
-          <Group position="apart" mt="lg">
-            <Anchor
-              // onClick={() => {
-              //   navigate('/forgotPassword')
-              // }}
-              href="#"
-              size="sm"
-              style={{ color: "#D92228", textDecoration: "none" }}
-            >
-              Forgot password?
-            </Anchor>
-          </Group>
-          <Button fullWidth mt="xl" color="red" type="submit">
+          <Title align="center" c={Colors.white} py={"xs"}>
             Sign in
-          </Button>
-        </form>
-      </Paper>
-    </Container>
+          </Title>
+          <form>
+            <Stack spacing={"xl"}>
+              <TextInput
+                label="Email"
+                placeholder="hello@gmail.com"
+                size="md"
+                styles={{
+                  label: {
+                    color: Colors.white,
+                    fontSize: "1.2rem",
+                  },
+                }}
+              />
+              <PasswordInput
+                label="Password"
+                placeholder="Your password"
+                size="md"
+                styles={{
+                  label: {
+                    color: Colors.white,
+                    fontSize: "1.2rem",
+                  },
+                }}
+              />
+            </Stack>
+
+            <Group position="apart" mt="lg">
+              <Anchor
+                // onClick={() => {
+                //   navigate('/forgotPassword')
+                // }}
+                href="#"
+                size="sm"
+                style={{ color: Colors.secondary, textDecoration: "none" }}
+              >
+                Forgot password?
+              </Anchor>
+            </Group>
+            <Button
+              fullWidth
+              mt="xl"
+              style={{
+                backgroundColor: Colors.secondary,
+                color: Colors.white,
+              }}
+              type="submit"
+            >
+              Sign in
+            </Button>
+          </form>
+        </Paper>
+      </Stack>
+    </div>
   );
 }
