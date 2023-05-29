@@ -34,12 +34,18 @@ const Dashboard = () => {
       }}
     >
       <Statistics />
-      <AttendanceChart
-        colors={colors}
-        series={series}
-        labels={labels}
-        lineColor={lineColor}
-      />
+      <div
+        style={{
+          width: "99.9%",
+        }}
+      >
+        <AttendanceChart
+          colors={colors}
+          series={series}
+          labels={labels}
+          lineColor={lineColor}
+        />
+      </div>
       <SimpleGrid
         cols={2}
         breakpoints={[
