@@ -29,12 +29,6 @@ const links = [
     url: "/timetable",
     icon: BsFillCalendarCheckFill,
   },
-  {
-    id: 5,
-    text: "Notifications",
-    url: "/notifications",
-    icon: IoNotificationsOutline,
-  },
 ];
 
 export default links;
