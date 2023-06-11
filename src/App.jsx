@@ -4,12 +4,15 @@ import AppLayout from "./components/Layout";
 import Login from "./components/auth/Login";
 import SignUp from "./components/auth/SignUp";
 import ForgotPassword from "./components/auth/ForgotPassword";
+import RequireAuth from "./context/RequireAuth";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<AppLayout />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/" element={<AppLayout />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/resetPassword" element={<ForgotPassword />} />
