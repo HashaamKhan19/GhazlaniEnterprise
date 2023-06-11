@@ -1,11 +1,13 @@
-import React from "react";
-import useAuth from "../hooks/useAuth";
+import React, { useContext, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "./authContext";
 
 const RequireAuth = () => {
-  const { auth } = useAuth();
+  const { user, setUser } = useContext(AuthContext);
 
-  return auth ? <Outlet /> : <Navigate to="/login" />;
+  console.log("user in require auth: ", user);
+
+  return user ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default RequireAuth;

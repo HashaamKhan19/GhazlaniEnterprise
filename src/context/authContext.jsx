@@ -6,26 +6,23 @@ export const AuthContext = createContext({});
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  //   useEffect(() => {
-  //     const fetchUser = async () => {
-  //       const token = await localStorage.getItem('token');
-  //       const userType = await localStorage.getItem('userType');
-  //       const id = await localStorage.getItem('id');
+  useEffect(() => {
+    const token = localStorage.getItem("token") || null;
+    const userType = localStorage.getItem("userType") || null;
+    const id = localStorage.getItem("id") || null;
 
-  //       if (token && userType && id) {
-  //         setUser({token, userType, id});
-  //       }
-  //     };
-  //     fetchUser();
-  //   }, []);
+    if (token && userType && id) {
+      setUser({ token, userType, id });
+    }
+  }, []);
 
-  //   const logout = () => {
-  //     localStorage.clear();
-  //     setUser(null);
-  //   };
+  const logout = () => {
+    localStorage.clear();
+    setUser(null);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -10,12 +10,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route element={<RequireAuth />}>
-          <Route path="/" element={<AppLayout />} />
-        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/resetPassword" element={<ForgotPassword />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/" element={<AppLayout />} />
+        </Route>
       </Routes>
     </Router>
   );

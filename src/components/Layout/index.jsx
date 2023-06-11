@@ -2,6 +2,7 @@ import {
   AppShell,
   Burger,
   Drawer,
+  Group,
   Header,
   Navbar,
   Stack,
@@ -81,6 +82,7 @@ function AppLayout() {
                   Ghazlani Enterprise
                 </Text>
               </div>
+
               <UserProfile />
             </div>
           </Header>

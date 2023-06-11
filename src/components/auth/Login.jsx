@@ -11,9 +11,55 @@ import {
 } from "@mantine/core";
 import Colors from "../../utils/Colors";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/authContext";
 
 export default function Login() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const { user, setUser } = useContext(AuthContext);
+
+  async function handleSubmit() {
+    if (!email || !password) {
+      setError("Please fill all the fields");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/users/login",
+        {
+          email,
+          password,
+        }
+      );
+
+      console.log(response);
+
+      if (response?.data?.status === "success") {
+        localStorage.setItem("token", response?.data?.token);
+        localStorage.setItem("userType", response?.data?.data?.user?.role);
+        localStorage.setItem("id", response?.data?.data?.user?._id);
+        setUser(response?.data?.data?.user);
+        navigate("/");
+        setLoading(false);
+      } else {
+        setError(response.data.message);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  console.log("user data: ", user);
 
   return (
     <div
@@ -50,7 +96,7 @@ export default function Login() {
           radius="lg"
           bg={Colors.primary}
           style={{
-            width: "420px",
+            minWidth: "420px",
             height: "auto",
           }}
         >
@@ -69,6 +115,10 @@ export default function Login() {
                     fontSize: "1.2rem",
                   },
                 }}
+                required
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
               />
               <PasswordInput
                 label="Password"
@@ -79,6 +129,10 @@ export default function Login() {
                     color: Colors.white,
                     fontSize: "1.2rem",
                   },
+                }}
+                required
+                onChange={(e) => {
+                  setPassword(e.target.value);
                 }}
               />
             </Stack>
@@ -103,6 +157,12 @@ export default function Login() {
                 color: Colors.white,
               }}
               type="submit"
+              loading={loading}
+              onClick={(e) => {
+                e.preventDefault();
+                setLoading(true);
+                handleSubmit();
+              }}
             >
               Sign in
             </Button>
