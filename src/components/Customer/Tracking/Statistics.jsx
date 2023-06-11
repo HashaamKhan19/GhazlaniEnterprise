@@ -17,10 +17,10 @@ const Statistics = () => {
       <Paper p="lg" style={{ width: "50%" }} bg={Colors.primary} radius={"lg"}>
         <Stack>
           <Text c={Colors.white} size={"xl"}>
-            Courses Left
+            Attendance
           </Text>
           <Text c={Colors.secondary} size={"lg"}>
-            3
+            100%
           </Text>
         </Stack>
       </Paper>

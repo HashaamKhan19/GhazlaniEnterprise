@@ -5,12 +5,25 @@ import Statistics from "./Statistics";
 import Tasks from "./Tasks";
 import { SimpleGrid } from "@mantine/core";
 import Calendar from "./Calendar";
+import QuestionsChart from "./charts/QuestionsChart";
 
 const Dashboard = () => {
   const colors = [Colors.secondary, "#c4ceee", "#d7def3", "#ebeef9", "#ffffff"];
   const series = [
     { name: "Attendance", data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] },
   ];
+  const QuestionSeries = [{ name: "Questions", data: [1, 2, 3, 4, 5, 6, 7] }];
+
+  const QuestionLabels = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
   const labels = [
     "January",
     "February",
@@ -54,8 +67,13 @@ const Dashboard = () => {
         ]}
         pt={"xl"}
       >
+        <QuestionsChart
+          colors={colors}
+          series={QuestionSeries}
+          labels={QuestionLabels}
+          lineColor={lineColor}
+        />
         <Tasks />
-        <Calendar />
       </SimpleGrid>
       <br />
     </div>

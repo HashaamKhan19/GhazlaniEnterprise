@@ -1,7 +1,7 @@
 import { Box, Card, CardSection, Group, Stack, Text } from "@mantine/core";
 import React from "react";
 import Colors from "../../../utils/Colors";
-import { BsBookHalf, BsFillCalendarDateFill } from "react-icons/bs";
+import { BsPersonCheck, BsFillCalendarDateFill } from "react-icons/bs";
 import { MdManageAccounts } from "react-icons/md";
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -11,9 +11,9 @@ const Statistics = () => {
   const data = [
     {
       id: 1,
-      label: "Courses Left",
-      value: 3,
-      icon: BsBookHalf,
+      label: "Attendance",
+      value: "100%",
+      icon: BsPersonCheck,
     },
     {
       id: 2,
