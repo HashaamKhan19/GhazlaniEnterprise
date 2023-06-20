@@ -37,7 +37,7 @@ const RequireAuth = () => {
           backgroundColor: Colors.main,
         }}
       >
-        <Loader color="cyan" variant="oval" />
+        <Loader color={Colors.white} variant="oval" />
       </div>
     );
   }
