@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { AuthContext } from "./authContext";
 import Colors from "../utils/Colors";
+import { Loader } from "@mantine/core";
 
 const RequireAuth = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -13,13 +14,17 @@ const RequireAuth = () => {
     const id = localStorage.getItem("id") || null;
 
     if (token && userType && id) {
-      setUser({ token, userType, id });
+      // setUser({ token, userType, id });
+      setUser((prevUser) => ({
+        ...prevUser,
+        token,
+        userType,
+        id,
+      }));
     }
 
     setLoading(false);
   }, []);
-
-  console.log("user in require auth: ", user);
 
   if (loading) {
     return (
@@ -32,7 +37,7 @@ const RequireAuth = () => {
           backgroundColor: Colors.main,
         }}
       >
-        Loading...
+        <Loader color="cyan" variant="oval" />
       </div>
     );
   }

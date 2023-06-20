@@ -12,6 +12,8 @@ const UserProfile = () => {
 
   const { logout, user } = useContext(AuthContext);
 
+  console.log("user in user profile: ", user);
+
   return (
     <div
       style={{

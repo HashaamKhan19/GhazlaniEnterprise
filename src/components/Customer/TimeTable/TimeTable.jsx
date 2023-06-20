@@ -12,7 +12,11 @@ const TimeTable = () => {
   const [sleepTime, setSleepTime] = useState();
 
   return (
-    <div>
+    <div
+      style={{
+        marginTop: "1rem",
+      }}
+    >
       <Text
         style={{
           textAlign: "center",
@@ -83,8 +87,20 @@ const TimeTable = () => {
           marginTop: "2rem",
         }}
       >
-        <Text style={{ color: Colors.white }}>My Awake time: {awakeTime}</Text>
-        <Text style={{ color: Colors.white }}>My Sleep time: {sleepTime}</Text>
+        <Text
+          style={{ color: Colors.white, fontSize: "1.2rem", fontWeight: 500 }}
+        >
+          My Awake time:{" "}
+          <span style={{ color: Colors.secondary, fontSize: "1rem" }}>
+            {awakeTime || "Not yet available"}
+          </span>
+        </Text>
+        <Text style={{ color: Colors.white, fontSize: "1.2rem" }}>
+          My Awake time:{" "}
+          <span style={{ color: Colors.secondary, fontSize: "1rem" }}>
+            {sleepTime || "Not yet available"}
+          </span>
+        </Text>
       </div>
     </div>
   );

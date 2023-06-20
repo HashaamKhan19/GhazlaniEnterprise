@@ -44,6 +44,7 @@ export default function Login() {
       console.log(response);
 
       if (response?.data?.status === "success") {
+        console.log("response: ", response);
         localStorage.setItem("token", response?.data?.token);
         localStorage.setItem("userType", response?.data?.data?.user?.role);
         localStorage.setItem("id", response?.data?.data?.user?._id);
