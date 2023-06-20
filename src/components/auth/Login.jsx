@@ -59,8 +59,6 @@ export default function Login() {
     }
   }
 
-  console.log("user data: ", user);
-
   return (
     <div
       style={{

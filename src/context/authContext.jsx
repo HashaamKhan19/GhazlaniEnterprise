@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext({});
 
-/*eslint-disable*/
+// eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
