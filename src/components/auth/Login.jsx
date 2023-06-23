@@ -45,6 +45,8 @@ export default function Login() {
         // localStorage.setItem("token", response?.data?.token);
         // localStorage.setItem("userType", response?.data?.data?.user?.role);
         // localStorage.setItem("id", response?.data?.data?.user?._id);
+        localStorage.setItem("username", response?.data?.data?.user?.name);
+        localStorage.setItem("email", response?.data?.data?.user?.email);
         // setUser(response?.data?.data?.user);
         login(response?.data?.data?.user, response?.data?.token);
         navigate("/");
@@ -68,7 +70,11 @@ export default function Login() {
         alignItems: "center",
       }}
     >
-      <Stack>
+      <Stack
+        style={{
+          minWidth: "30%",
+        }}
+      >
         <Title align="center" c={Colors.white}>
           Welcome back to
           <Text c={Colors.red}>Ghazlani Enterprise</Text>
@@ -93,8 +99,7 @@ export default function Login() {
           radius="lg"
           bg={Colors.primary}
           style={{
-            minWidth: "420px",
-            height: "auto",
+            width: "100%",
           }}
         >
           <Title align="center" c={Colors.white} py={"xs"}>
