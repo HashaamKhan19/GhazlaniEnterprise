@@ -23,7 +23,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, login } = useContext(AuthContext);
 
   async function handleSubmit() {
     if (!email || !password) {
@@ -31,24 +31,22 @@ export default function Login() {
       setLoading(false);
       return;
     }
-
+    setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/users/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:3000/api/users/login", {
+        email,
+        password,
+      });
 
       console.log(response);
 
       if (response?.data?.status === "success") {
         console.log("response: ", response);
-        localStorage.setItem("token", response?.data?.token);
-        localStorage.setItem("userType", response?.data?.data?.user?.role);
-        localStorage.setItem("id", response?.data?.data?.user?._id);
-        setUser(response?.data?.data?.user);
+        // localStorage.setItem("token", response?.data?.token);
+        // localStorage.setItem("userType", response?.data?.data?.user?.role);
+        // localStorage.setItem("id", response?.data?.data?.user?._id);
+        // setUser(response?.data?.data?.user);
+        login(response?.data?.data?.user, response?.data?.token);
         navigate("/");
         setLoading(false);
       } else {

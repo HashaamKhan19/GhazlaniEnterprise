@@ -11,10 +11,40 @@ import {
 } from "@mantine/core";
 import Colors from "../../utils/Colors";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useContext, useRef, useState } from "react";
+import { AuthContext } from "../../context/authContext";
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const emailRef = useRef();
+  const nameRef = useRef();
+  const passwordRef = useRef();
+  const passwordConfirmRef = useRef();
 
+  const [loading, setLoading] = useState(false);
+
+  const auth = useContext(AuthContext);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    axios
+      .post("http://localhost:3000/api/users/signup", {
+        name: nameRef.current.value,
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+        passwordConfirm: passwordConfirmRef.current.value,
+      })
+      .then((res) => {
+        console.log(res.data);
+        // authcontext login
+        auth.login(res.data.data.user, res.data.token);
+        auth.setUser(res?.data?.data?.user);
+        setLoading(false);
+        navigate("/");
+      });
+  };
   return (
     <div
       style={{
@@ -44,8 +74,20 @@ export default function SignUp() {
           <Title align="center" c={Colors.white} py={"xs"}>
             Sign Up
           </Title>
-          <form>
+          <form onSubmit={handleSubmit}>
             <Stack spacing={"xl"}>
+              <TextInput
+                label="Name"
+                placeholder="john doe"
+                size="md"
+                styles={{
+                  label: {
+                    color: Colors.white,
+                    fontSize: "1.2rem",
+                  },
+                }}
+                ref={nameRef}
+              />
               <TextInput
                 label="Email"
                 placeholder="hello@gmail.com"
@@ -56,6 +98,7 @@ export default function SignUp() {
                     fontSize: "1.2rem",
                   },
                 }}
+                ref={emailRef}
               />
               <PasswordInput
                 label="Password"
@@ -67,6 +110,7 @@ export default function SignUp() {
                     fontSize: "1.2rem",
                   },
                 }}
+                ref={passwordRef}
               />
               <PasswordInput
                 label="Confirm Password"
@@ -78,6 +122,7 @@ export default function SignUp() {
                     fontSize: "1.2rem",
                   },
                 }}
+                ref={passwordConfirmRef}
               />
             </Stack>
 
@@ -104,6 +149,7 @@ export default function SignUp() {
                 color: Colors.white,
               }}
               type="submit"
+              loading={loading}
             >
               Register
             </Button>

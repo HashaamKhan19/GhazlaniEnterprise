@@ -9,9 +9,7 @@ import QuestionsChart from "./charts/QuestionsChart";
 
 const Dashboard = () => {
   const colors = [Colors.secondary, "#c4ceee", "#d7def3", "#ebeef9", "#ffffff"];
-  const series = [
-    { name: "Attendance", data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] },
-  ];
+  const series = [{ name: "Attendance", data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] }];
   const QuestionSeries = [{ name: "Questions", data: [1, 2, 3, 4, 5, 6, 7] }];
 
   const QuestionLabels = [
@@ -52,12 +50,7 @@ const Dashboard = () => {
           width: "99.9%",
         }}
       >
-        <AttendanceChart
-          colors={colors}
-          series={series}
-          labels={labels}
-          lineColor={lineColor}
-        />
+        <AttendanceChart colors={colors} series={series} labels={labels} lineColor={lineColor} />
       </div>
       <SimpleGrid
         cols={2}
