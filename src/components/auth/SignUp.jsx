@@ -11,88 +11,41 @@ import {
 } from "@mantine/core";
 import Colors from "../../utils/Colors";
 import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import { AiOutlineWarning } from "react-icons/ai";
 import axios from "axios";
+import { AuthContext } from "../../context/authContext";
 
 export default function SignUp() {
   const navigate = useNavigate();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const emailRef = useRef();
+  const nameRef = useRef();
+  const passwordRef = useRef();
+  const passwordConfirmRef = useRef();
 
   const [loading, setLoading] = useState(false);
 
-  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  //must contain atleast 1 uppercase, 1 lowercase, 1 digit, 1 special character from the set [@$!%*?&] and must be 8 characters long
+  const auth = useContext(AuthContext);
 
-  const isValidEmail = emailRegex.test(email);
-  const isValidPassword = passwordRegex.test(password);
-  const isConfirmPasswordMatched = password === confirmPassword;
-
-  async function handleSubmit() {
-    // if (!isValidEmail || !isValidPassword || !isConfirmPasswordMatched) {
-    //   if (!isValidEmail) {
-    //     notifications.show({
-    //       title: "Invalid Email Address",
-    //       message: "You have entered invalid email address!",
-    //       color: "red",
-    //       icon: <AiOutlineWarning size={14} />,
-    //       autoClose: 3000,
-    //     });
-    //   }
-    //   if (!isValidPassword) {
-    //     notifications.show({
-    //       title: "Invalid Password",
-    //       message: "You have entered wrong format password!",
-    //       color: "red",
-    //       icon: <AiOutlineWarning size={14} />,
-    //       autoClose: 3000,
-    //     });
-    //   }
-    //   if (!isConfirmPasswordMatched) {
-    //     notifications.show({
-    //       title: "Password validation failed",
-    //       message: "Password and confirm password does not match!",
-    //       color: "red",
-    //       icon: <AiOutlineWarning size={14} />,
-    //       autoClose: 3000,
-    //     });
-    //   }
-    //   return;
-    // }
-
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/users/signup",
-        {
-          email,
-          password,
-          confirmPassword,
-        }
-      );
-      if (response?.data?.status === "success") {
-        console.log("response: ", response);
-        navigate("/login");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    axios
+      .post("http://localhost:3000/api/users/signup", {
+        name: nameRef.current.value,
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+        passwordConfirm: passwordConfirmRef.current.value,
+      })
+      .then((res) => {
+        console.log(res.data);
+        // authcontext login
+        auth.login(res.data.data.user, res.data.token);
+        auth.setUser(res?.data?.data?.user);
         setLoading(false);
-      } else {
-        // notifications.show({
-        //   title: "SignUp failed",
-        //   message: "An error occured!",
-        //   color: "red",
-        //   icon: <AiOutlineWarning size={14} />,
-        //   autoClose: 3000,
-        // });
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
+        navigate("/");
+      });
+  };
   return (
     <div
       style={{
@@ -125,8 +78,20 @@ export default function SignUp() {
           <Title align="center" c={Colors.white} py={"xs"}>
             Sign Up
           </Title>
-          <form>
+          <form onSubmit={handleSubmit}>
             <Stack spacing={"xl"}>
+              <TextInput
+                label="Name"
+                placeholder="john doe"
+                size="md"
+                styles={{
+                  label: {
+                    color: Colors.white,
+                    fontSize: "1.2rem",
+                  },
+                }}
+                ref={nameRef}
+              />
               <TextInput
                 label="Email"
                 placeholder="hello@gmail.com"
@@ -137,9 +102,7 @@ export default function SignUp() {
                     fontSize: "1.2rem",
                   },
                 }}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
+                ref={emailRef}
               />
               <PasswordInput
                 label="Password"
@@ -151,9 +114,7 @@ export default function SignUp() {
                     fontSize: "1.2rem",
                   },
                 }}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
+                ref={passwordRef}
               />
               <PasswordInput
                 label="Confirm Password"
@@ -165,9 +126,7 @@ export default function SignUp() {
                     fontSize: "1.2rem",
                   },
                 }}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                }}
+                ref={passwordConfirmRef}
               />
             </Stack>
 
