@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { useRef, useState, useContext } from "react";
 import { AiOutlineWarning } from "react-icons/ai";
 import axios from "axios";
-import { AuthContext } from "../../context/authContext";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -24,8 +23,6 @@ export default function SignUp() {
   const passwordConfirmRef = useRef();
 
   const [loading, setLoading] = useState(false);
-
-  const auth = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,11 +36,8 @@ export default function SignUp() {
       })
       .then((res) => {
         console.log(res.data);
-        // authcontext login
-        auth.login(res.data.data.user, res.data.token);
-        auth.setUser(res?.data?.data?.user);
         setLoading(false);
-        navigate("/");
+        navigate("/login");
       });
   };
   return (
@@ -78,7 +72,7 @@ export default function SignUp() {
           <Title align="center" c={Colors.white} py={"xs"}>
             Sign Up
           </Title>
-          <form onSubmit={handleSubmit}>
+          <form>
             <Stack spacing={"xl"}>
               <TextInput
                 label="Name"
@@ -155,9 +149,8 @@ export default function SignUp() {
               type="submit"
               loading={loading}
               onClick={(e) => {
-                e.preventDefault();
                 setLoading(true);
-                handleSubmit();
+                handleSubmit(e);
               }}
             >
               Register
