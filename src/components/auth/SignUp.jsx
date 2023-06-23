@@ -25,7 +25,11 @@ export default function SignUp() {
         alignItems: "center",
       }}
     >
-      <Stack>
+      <Stack
+        style={{
+          minWidth: "30%",
+        }}
+      >
         <Title align="center" c={Colors.white}>
           Welcome to
           <Text c={Colors.red}>Ghazlani Enterprise</Text>
@@ -37,8 +41,7 @@ export default function SignUp() {
           radius="lg"
           bg={Colors.primary}
           style={{
-            width: "420px",
-            height: "auto",
+            width: "100%",
           }}
         >
           <Title align="center" c={Colors.white} py={"xs"}>

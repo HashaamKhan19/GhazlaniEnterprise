@@ -50,10 +50,10 @@ const UserProfile = () => {
           <Menu.Item c={Colors.main}>
             <Stack spacing={"xs"}>
               <Text c={Colors.secondary} fw={600}>
-                {userData?.name || "user"}
+                {localStorage.getItem("username") || user?.name || "user"}
               </Text>
               <Text c={Colors.secondary} fw={600}>
-                {userData?.email || "user"}
+                {localStorage.getItem("email") || userData?.email || "user"}
               </Text>
             </Stack>
           </Menu.Item>

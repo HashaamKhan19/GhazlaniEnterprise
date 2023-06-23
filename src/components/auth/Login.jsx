@@ -35,6 +35,7 @@ export default function Login() {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/users/login",
+        // "https://ghazlani-backend.vercel.app/users/login",
         {
           email,
           password,
@@ -48,6 +49,8 @@ export default function Login() {
         localStorage.setItem("token", response?.data?.token);
         localStorage.setItem("userType", response?.data?.data?.user?.role);
         localStorage.setItem("id", response?.data?.data?.user?._id);
+        localStorage.setItem("username", response?.data?.data?.user?.name);
+        localStorage.setItem("email", response?.data?.data?.user?.email);
         setUser(response?.data?.data?.user);
         navigate("/");
         setLoading(false);
@@ -70,7 +73,11 @@ export default function Login() {
         alignItems: "center",
       }}
     >
-      <Stack>
+      <Stack
+        style={{
+          minWidth: "30%",
+        }}
+      >
         <Title align="center" c={Colors.white}>
           Welcome back to
           <Text c={Colors.red}>Ghazlani Enterprise</Text>
@@ -95,8 +102,7 @@ export default function Login() {
           radius="lg"
           bg={Colors.primary}
           style={{
-            minWidth: "420px",
-            height: "auto",
+            width: "100%",
           }}
         >
           <Title align="center" c={Colors.white} py={"xs"}>
