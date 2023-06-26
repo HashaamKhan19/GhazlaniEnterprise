@@ -25,10 +25,7 @@ function AdminLayout() {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    if (
-      user?.role !== "admin" ||
-      localStorage.getItem("userType") !== "admin"
-    ) {
+    if (localStorage.getItem("userType") !== "admin") {
       localStorage.clear();
       window.location.href = "/login";
     }
@@ -89,7 +86,7 @@ function AdminLayout() {
                     fontWeight: 600,
                   }}
                 >
-                  Ghazlani Enterprise - Admin Portal
+                  Admin Portal
                 </Text>
               </div>
 

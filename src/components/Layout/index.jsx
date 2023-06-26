@@ -28,7 +28,7 @@ function AppLayout() {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    if (user?.role !== "user" || localStorage.getItem("userType") !== "user") {
+    if (localStorage.getItem("userType") !== "user") {
       localStorage.clear();
       window.location.href = "/login";
     }
