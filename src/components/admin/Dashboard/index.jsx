@@ -25,8 +25,12 @@ function AdminLayout() {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    if (user?.role !== "admin") {
-      window.location.href = "/";
+    if (
+      user?.role !== "admin" ||
+      localStorage.getItem("userType") !== "admin"
+    ) {
+      localStorage.clear();
+      window.location.href = "/login";
     }
   }, [user]);
 
