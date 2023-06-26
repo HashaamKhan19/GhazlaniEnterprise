@@ -1,29 +1,26 @@
 import {
   TextInput,
   PasswordInput,
-  Anchor,
   Paper,
   Title,
-  Text,
-  Group,
   Button,
   Stack,
 } from "@mantine/core";
-import Colors from "../../utils/Colors";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useContext, useState } from "react";
-import { AuthContext } from "../../context/authContext";
+import Colors from "../../../utils/Colors";
+import axios from "axios";
+import { AuthContext } from "../../../context/authContext";
 
-export default function Login() {
+export default function AdminLogin() {
   const navigate = useNavigate();
+
+  const { setUser } = useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const { setUser } = useContext(AuthContext);
 
   async function handleSubmit() {
     if (!email || !password) {
@@ -38,6 +35,7 @@ export default function Login() {
         {
           email,
           password,
+          role: "admin",
         }
       );
 
@@ -51,8 +49,7 @@ export default function Login() {
         localStorage.setItem("username", response?.data?.data?.user?.name);
         localStorage.setItem("email", response?.data?.data?.user?.email);
         setUser(response?.data?.data?.user);
-        // login(response?.data?.data?.user, response?.data?.token);
-        navigate("/");
+        navigate("/admin");
         setLoading(false);
       } else {
         setError(response.data.message);
@@ -80,24 +77,6 @@ export default function Login() {
           minWidth: "30%",
         }}
       >
-        <Title align="center" c={Colors.white}>
-          Welcome back to
-          <Text c={Colors.red}>Ghazlani Enterprise</Text>
-        </Title>
-        <Text color="dimmed" size="lg" align="center" mt={5}>
-          Do not have an account yet?{" "}
-          <Anchor
-            href="#"
-            size="sm"
-            style={{ color: Colors.secondary, textDecoration: "none" }}
-            onClick={() => {
-              navigate("/register");
-            }}
-          >
-            Create account
-          </Anchor>
-        </Text>
-
         <Paper
           p={"xl"}
           mt={"xl"}
@@ -107,8 +86,8 @@ export default function Login() {
             width: "100%",
           }}
         >
-          <Title align="center" c={Colors.white} py={"xs"}>
-            Sign in
+          <Title align="center" c={Colors.white} py={"lg"}>
+            Admin Sign in
           </Title>
           <form>
             <Stack spacing={"xl"}>
@@ -144,18 +123,6 @@ export default function Login() {
               />
             </Stack>
 
-            <Group position="apart" mt="lg">
-              <Anchor
-                onClick={() => {
-                  navigate("/resetPassword");
-                }}
-                href="#"
-                size="sm"
-                style={{ color: Colors.secondary, textDecoration: "none" }}
-              >
-                Forgot password?
-              </Anchor>
-            </Group>
             <Button
               fullWidth
               mt="xl"

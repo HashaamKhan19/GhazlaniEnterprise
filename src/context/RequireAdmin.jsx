@@ -4,16 +4,15 @@ import { AuthContext } from "./authContext";
 import Colors from "../utils/Colors";
 import { Loader } from "@mantine/core";
 
-const RequireAuth = () => {
+const RequireAdmin = () => {
   const { user, setUser, token } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token") || null;
     const userType = localStorage.getItem("userType") || null;
     const id = localStorage.getItem("id") || null;
 
-    if (token && userType && id) {
+    if (token && userType === "admin" && id) {
       setUser((prevUser) => ({
         ...prevUser,
         token,
@@ -41,7 +40,11 @@ const RequireAuth = () => {
     );
   }
 
-  return user ? <Outlet /> : <Navigate to="/login" />;
+  return user && user.userType === "admin" ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" />
+  );
 };
 
-export default RequireAuth;
+export default RequireAdmin;

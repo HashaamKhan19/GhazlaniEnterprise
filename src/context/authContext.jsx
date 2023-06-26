@@ -6,7 +6,6 @@ export const AuthContext = createContext({
   logout: () => {},
   token: null,
   setToken: () => {},
-  login: () => {},
 });
 
 // eslint-disable-next-line react/prop-types
@@ -25,20 +24,20 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (user, token) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("userType", user.role);
-    localStorage.setItem("id", user.id);
-    localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
-  };
+  // const login = (user, token) => {
+  //   localStorage.setItem("token", token);
+  //   localStorage.setItem("userType", user.role);
+  //   localStorage.setItem("id", user.id);
+  //   localStorage.setItem("user", JSON.stringify(user));
+  //   setUser(user);
+  // };
   const logout = () => {
     localStorage.clear();
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout, token: jwt, setJWT }}>
+    <AuthContext.Provider value={{ user, setUser, logout, token: jwt, setJWT }}>
       {children}
     </AuthContext.Provider>
   );
