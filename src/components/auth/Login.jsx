@@ -52,8 +52,12 @@ export default function Login() {
         localStorage.setItem("username", response?.data?.data?.user?.name);
         localStorage.setItem("email", response?.data?.data?.user?.email);
         setUser(response?.data?.data?.user);
-        // login(response?.data?.data?.user, response?.data?.token);
-        navigate("/");
+
+        {
+          response?.data?.data?.user?.role === "admin"
+            ? navigate("/admin")
+            : navigate("/");
+        }
         toast.success(`Welcome back ${response?.data?.data?.user?.name}!`, {
           position: "top-center",
           icon: "👏",

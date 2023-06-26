@@ -11,18 +11,28 @@ import {
 import Colors from "../../utils/Colors";
 import UserProfile from "../Generic/UserProfile";
 import Sidebar from "./Sidebar";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Dashboard from "../Customer/Dashboard/Dashboard";
 import Questions from "../Customer/Questions/Questions";
 import TimeTable from "../Customer/TimeTable/TimeTable";
 import Tracking from "../Customer/Tracking/Tracking";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { AuthContext } from "../../context/authContext";
 
 function AppLayout() {
   const [activeLink, setActiveLink] = useState(1);
   const [opened, { toggle }] = useDisclosure(false);
 
   const match768 = useMediaQuery("(max-width: 768px)");
+
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user?.role !== "user") {
+      localStorage.clear();
+      window.location.href = "/login";
+    }
+  }, [user]);
 
   return (
     <>
