@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext";
+import { toast } from "react-hot-toast";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -53,14 +54,25 @@ export default function Login() {
         setUser(response?.data?.data?.user);
         // login(response?.data?.data?.user, response?.data?.token);
         navigate("/");
+        toast.success(`Welcome back ${response?.data?.data?.user?.name}!`, {
+          position: "top-center",
+          icon: "👏",
+        });
         setLoading(false);
       } else {
         setError(response.data.message);
+        toast.error(response.data.message, {
+          position: "top-center",
+        });
         setLoading(false);
       }
     } catch (error) {
       console.log(error);
       setError(error.response.data.message);
+      toast.error("Invalid email or password", {
+        position: "top-center",
+      });
+
       setLoading(false);
     }
   }

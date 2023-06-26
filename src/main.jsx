@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { MantineProvider } from "@mantine/core";
 import AuthProvider from "./context/authContext.jsx";
+import { Toaster } from "react-hot-toast";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -13,6 +14,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       theme={{ fontFamily: "Urbanist" }}
     >
       <AuthProvider>
+        <Toaster
+          toastOptions={{
+            duration: 3000,
+          }}
+        />
         <App />
       </AuthProvider>
     </MantineProvider>
