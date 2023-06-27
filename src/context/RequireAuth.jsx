@@ -5,21 +5,18 @@ import Colors from "../utils/Colors";
 import { Loader } from "@mantine/core";
 
 const RequireAuth = () => {
-  const { user, setUser, token } = useContext(AuthContext);
+  const { user, setUser, token, setJWT } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token") || null;
     const userType = localStorage.getItem("userType") || null;
     const id = localStorage.getItem("id") || null;
+    const user = JSON.parse(localStorage.getItem("user")) || null;
 
     if (token && userType && id) {
-      setUser((prevUser) => ({
-        ...prevUser,
-        token,
-        userType,
-        id,
-      }));
+      setUser({ ...user, userType });
+      setJWT(token);
     }
 
     setLoading(false);

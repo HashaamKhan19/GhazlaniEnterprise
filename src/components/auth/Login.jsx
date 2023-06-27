@@ -34,13 +34,10 @@ export default function Login() {
     }
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/users/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:3000/api/users/login", {
+        email,
+        password,
+      });
 
       console.log(response);
 
@@ -51,12 +48,11 @@ export default function Login() {
         localStorage.setItem("id", response?.data?.data?.user?._id);
         localStorage.setItem("username", response?.data?.data?.user?.name);
         localStorage.setItem("email", response?.data?.data?.user?.email);
+        localStorage.setItem("user", JSON.stringify(response?.data?.data?.user));
         setUser(response?.data?.data?.user);
 
         {
-          response?.data?.data?.user?.role === "admin"
-            ? navigate("/admin")
-            : navigate("/");
+          response?.data?.data?.user?.role === "admin" ? navigate("/admin") : navigate("/");
         }
         toast.success(`Welcome back ${response?.data?.data?.user?.name}!`, {
           position: "top-center",
