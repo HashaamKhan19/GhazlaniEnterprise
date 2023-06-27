@@ -5,10 +5,15 @@ import {
   Paper,
   Progress,
   Pagination,
+  Center,
+  Loader,
+  Text,
 } from "@mantine/core";
 import data from "./users";
 import ActionIcons from "../../Generic/ActionIcons";
 import Colors from "../../../utils/Colors";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -46,43 +51,85 @@ const useStyles = createStyles((theme) => ({
 export default function AllUsers() {
   const { classes, cx } = useStyles();
 
-  const rows = data.map((row) => (
-    <tr key={row.id}>
-      <td>
-        <img
-          src={row.image}
-          alt={row.name}
-          style={{ width: 36, height: 36, borderRadius: "50%" }}
-        />
-      </td>
-      <td>{row.name}</td>
-      <td className={cx(classes.emailColumn)}>{row.email}</td>
-      <td className={cx(classes.attendanceColumn)}>
-        <Progress
-          value={row.attendance}
-          label={row.attendance + "%"}
-          size="xl"
-          radius="xl"
-          color={Colors.secondary}
-          styles={{
-            label: {
-              color: Colors.black,
-            },
-          }}
-        />
-      </td>
-      <td
-        style={{
-          textAlign: "center",
-        }}
-      >
-        {row.accountLevel}
-      </td>
-      <td>
-        <ActionIcons />
+  const [usersData, setUsersData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const result = await axios.get("http://localhost:3000/api/users/", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setUsersData(result?.data);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  // console.log("data: ", usersData);
+
+  const rows = loading ? (
+    <tr>
+      <td colSpan="12">
+        <Center>
+          <Loader
+            size={"md"}
+            variant="dots"
+            my={"xl"}
+            color={Colors.secondary}
+          />
+        </Center>
       </td>
     </tr>
-  ));
+  ) : usersData?.data?.users?.length === 0 ? (
+    <tr>
+      <td colSpan="12">
+        <Center>
+          <Text>No users found</Text>
+        </Center>
+      </td>
+    </tr>
+  ) : (
+    usersData?.data?.users?.map((row) => (
+      <tr key={row?._id}>
+        <td>
+          <img
+            src={row.image || "https://i.imgur.com/1qZ0W0S.png"}
+            alt={row.name}
+            style={{ width: 36, height: 36, borderRadius: "50%" }}
+          />
+        </td>
+        <td>{row.name}</td>
+        <td className={cx(classes.emailColumn)}>{row.email}</td>
+        <td className={cx(classes.attendanceColumn)}>
+          <Progress
+            value={row.attendancePercentage}
+            label={row.attendancePercentage + "%"}
+            size="xl"
+            radius="xl"
+            color={Colors.secondary}
+            styles={{
+              label: {
+                color: Colors.black,
+              },
+            }}
+          />
+        </td>
+        <td
+          style={{
+            textAlign: "center",
+          }}
+        >
+          {row.currentLevel}
+        </td>
+        <td>
+          <ActionIcons id={row._id} />
+        </td>
+      </tr>
+    ))
+  );
 
   return (
     <Paper my={"xs"} radius={"md"} p={"xs"}>
@@ -115,25 +162,27 @@ export default function AllUsers() {
           <tbody>{rows}</tbody>
         </Table>
       </div>
-      <Pagination
-        total={10}
-        position="right"
-        pr={"xl"}
-        styles={(theme) => ({
-          control: {
-            "&[data-active]": {
-              backgroundImage: theme.fn.gradient({
-                from: Colors.main,
-                to: Colors.main,
-              }),
+      {loading ? null : usersData?.data?.users?.length === 0 ? null : (
+        <Pagination
+          total={10}
+          position="right"
+          pr={"xl"}
+          styles={(theme) => ({
+            control: {
+              "&[data-active]": {
+                backgroundImage: theme.fn.gradient({
+                  from: Colors.main,
+                  to: Colors.main,
+                }),
+              },
             },
-          },
-          dots: {
-            color: Colors.secondary,
-          },
-        })}
-        mt={"xl"}
-      />
+            dots: {
+              color: Colors.secondary,
+            },
+          })}
+          mt={"xl"}
+        />
+      )}
     </Paper>
   );
 }
