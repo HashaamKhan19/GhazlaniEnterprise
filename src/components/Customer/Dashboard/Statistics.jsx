@@ -8,8 +8,8 @@ import { AuthContext } from "../../../context/authContext";
 
 const Statistics = () => {
   const match500 = useMediaQuery("(max-width: 500px)");
-
-  // const levels = auth.user?.levels;
+  const auth = useContext(AuthContext);
+  const levels = auth.user?.levels;
 
   // get the number of days from today to the provided time
   const getDaysDifference = (time) => {
@@ -23,27 +23,25 @@ const Statistics = () => {
   };
 
   // get the number of days till the end of level and divide by 7 to get the number of weeks
-  // const weeksLeft = getDaysDifference(levels.level_1.duration) / 7;
+  let weeksLeft = getDaysDifference(levels.level_1.duration) / 7;
+  weeksLeft = weeksLeft.toFixed(0);
   const data = [
     {
       id: 1,
       label: "Attendance",
-      // value: auth.user.attendancePercentage + "%",
-      value: "100%",
+      value: auth.user.attendancePercentage + "%",
       icon: BsPersonCheck,
     },
     {
       id: 2,
       label: "Weeks Left",
-      // value: weeksLeft,
-      value: 4,
+      value: weeksLeft,
       icon: BsFillCalendarDateFill,
     },
     {
       id: 3,
       label: "Account Level",
-      // value: auth.user.currentLevel,
-      value: "Level 1",
+      value: auth.user.currentLevel,
       icon: MdManageAccounts,
     },
   ];
