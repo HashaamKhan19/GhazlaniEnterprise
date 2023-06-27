@@ -1,13 +1,43 @@
-import { Button, Group, Paper, Stack, Text, Textarea, Timeline } from "@mantine/core";
 import React, { useContext, useRef, useState } from "react";
-import Colors from "../../../utils/Colors";
+import { useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+
+import { Button, Group, Paper, Stack, Text, Textarea, Timeline } from "@mantine/core";
+
+import Colors from "../../../utils/Colors";
 import { AuthContext } from "../../../context/authContext";
 
 const Questions = () => {
   const inputRef = useRef();
   const auth = useContext(AuthContext);
-  console.log("🚀 ~ file: Questions.jsx:10 ~ Questions ~ auth:", auth);
+  const [question, setQuestion] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/questions/dailyQuestion", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setQuestion(data?.data?.question);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        toast.error(err.message, {
+          position: "top-center",
+          icon: "💀",
+        });
+      });
+    return () => {
+      setQuestion(null);
+    };
+  }, [auth.token]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,17 +47,36 @@ const Questions = () => {
         Authorization: `Bearer ${auth.token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ answer: inputRef.current.value }),
+      body: JSON.stringify({ questionId: question?._id, answer: inputRef.current.value }),
     })
       .then((res) => {
-        return res.json();
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((err) => {
+            throw new Error(err.message || "Request failed with status " + err.status);
+          });
+        }
       })
       .then((data) => {
         console.log(data);
-        localStorage.setItem("user", JSON.stringify(data?.user));
-        auth.setUser(data?.user);
+        localStorage.setItem("user", JSON.stringify(data?.data?.user));
+        auth.setUser(data?.data?.user);
+        toast.success("Answer submitted successfully!", {
+          position: "top-center",
+          icon: "👏",
+        });
+        inputRef.current.value = "";
+      })
+      .catch((err) => {
+        toast.error(err.message, {
+          position: "top-center",
+          icon: "💀",
+        });
+        setIsLoading(false);
       });
   };
+  if (isLoading) return <div>Loading...</div>;
   return (
     <div>
       <Text c={Colors.white} size={26} p={"xs"} mb={"xs"}>
@@ -40,9 +89,7 @@ const Questions = () => {
             Question:{" "}
           </Text>
           <Text c={Colors.white} size={16}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum magnam quibusdam
-            obcaecati sint consequuntur accusantium, voluptates sequi quae corporis in velit
-            doloremque! Sapiente nam corrupti modi, aspernatur optio impedit repellendus.
+            {question?.question}
           </Text>
         </Stack>
       </Paper>
