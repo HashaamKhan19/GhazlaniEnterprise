@@ -6,18 +6,35 @@ import {
   Loader,
   Menu,
   Modal,
+  Stack,
   Text,
 } from "@mantine/core";
 import React from "react";
 import { FiTrash2 } from "react-icons/fi";
+import { AiOutlineEye } from "react-icons/ai";
 import Colors from "../../utils/Colors";
 import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-const ActionIcons = (id) => {
+/*
+eslint-disable
+*/
+const ActionIcons = ({
+  id,
+  name,
+  email,
+  image,
+  attendancePercentage,
+  currentLevel,
+  blocked,
+  role,
+}) => {
   const [active, setActive] = React.useState(false);
-  const [opened, { open, close }] = useDisclosure(false);
+  const [deleteOpened, { open: deleteOpen, close: deleteClose }] =
+    useDisclosure(false);
+  const [viewOpened, { open: viewOpen, close: viewClose }] =
+    useDisclosure(false);
   const [loading, setLoading] = React.useState(false);
 
   async function handleDelete() {
@@ -82,13 +99,21 @@ const ActionIcons = (id) => {
           </Menu.Dropdown>
         </Menu>
 
-        <ActionIcon onClick={open}>
-          <FiTrash2 color={Colors.red} />
-        </ActionIcon>
+        <Group noWrap spacing={"xs"}>
+          <ActionIcon onClick={deleteOpen}>
+            <FiTrash2 color={Colors.red} size={20} />
+          </ActionIcon>
+
+          <ActionIcon onClick={viewOpen}>
+            <AiOutlineEye color={Colors.blue} size={22} />
+          </ActionIcon>
+        </Group>
       </Group>
+
+      {/* Deleting a user modal */}
       <Modal
-        opened={opened}
-        onClose={close}
+        opened={deleteOpened}
+        onClose={deleteClose}
         title="Deletion Confirmation"
         centered
         overlayProps={{
@@ -129,6 +154,64 @@ const ActionIcons = (id) => {
             </Group>
           </>
         )}
+      </Modal>
+
+      {/* View Details Modal */}
+      <Modal
+        opened={viewOpened}
+        onClose={viewClose}
+        title="View User Details"
+        centered
+        overlayProps={{
+          color: Colors.black,
+          opacity: 0.55,
+          blur: 3,
+        }}
+        styles={{
+          title: {
+            color: Colors.black,
+            fontWeight: 700,
+            fontSize: "1.1rem",
+            width: "100%",
+            textAlign: "center",
+            textTransform: "uppercase",
+          },
+        }}
+        padding={"xl"}
+        radius={"md"}
+      >
+        <Stack align="center">
+          <Text c={Colors.black} fw={600} size={"lg"}>
+            Name:{" "}
+            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{name}</span>
+          </Text>
+          <Text c={Colors.black} fw={600} size={"lg"}>
+            Email:{" "}
+            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{email}</span>
+          </Text>
+          <Text c={Colors.black} fw={600} size={"lg"}>
+            Attendance:{" "}
+            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>
+              {attendancePercentage + "%"}
+            </span>
+          </Text>
+          <Text c={Colors.black} fw={600} size={"lg"}>
+            Account Level:{" "}
+            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>
+              {currentLevel}
+            </span>
+          </Text>
+          <Text c={Colors.black} fw={600} size={"lg"}>
+            Account Status:{" "}
+            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>
+              {blocked ? "Blocked" : "Active"}
+            </span>
+          </Text>
+          <Text c={Colors.black} fw={600} size={"lg"}>
+            Role:{" "}
+            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{role}</span>
+          </Text>
+        </Stack>
       </Modal>
     </>
   );
