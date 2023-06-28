@@ -53,19 +53,28 @@ export default function AllUsers() {
   const [usersData, setUsersData] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(4);
+
+  const [totalPages, setTotalPages] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const result = await axios.get("http://localhost:3000/api/users/", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const result = await axios.get(
+        `http://localhost:3000/api/users?limit=${limit}&page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setTotalPages(Math.ceil(result?.data?.data?.totalDocs / limit));
       setUsersData(result?.data);
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [limit, page]);
 
   const rows = loading ? (
     <tr>
@@ -170,7 +179,6 @@ export default function AllUsers() {
       </div>
       {loading ? null : usersData?.data?.users?.length === 0 ? null : (
         <Pagination
-          // total={10}
           position="right"
           pr={"xl"}
           styles={(theme) => ({
@@ -187,6 +195,9 @@ export default function AllUsers() {
             },
           })}
           mt={"xl"}
+          total={totalPages}
+          value={page}
+          onChange={setPage}
         />
       )}
     </Paper>
