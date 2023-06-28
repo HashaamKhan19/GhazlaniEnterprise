@@ -1,17 +1,13 @@
-import {
-  ActionIcon,
-  Button,
-  Group,
-  Select,
-  SimpleGrid,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Button, Group, Select, SimpleGrid, Text } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import Colors from "../../../utils/Colors";
+import { toast } from "react-hot-toast";
+import { AuthContext } from "../../../context/authContext";
 
 const TimeTable = () => {
+  const auth = useContext(AuthContext);
   const refAwakeMonday = useRef();
   const refSleepMonday = useRef();
 
@@ -33,7 +29,7 @@ const TimeTable = () => {
   const refAwakeSunday = useRef();
   const refSleepSunday = useRef();
 
-  const [awakeTimeMonday, setAwakeTimeMonday] = useState("");
+  const [awakeTimeMonday, setAwakeTimeMonday] = useState();
   const [sleepTimeMonday, setSleepTimeMonday] = useState("");
 
   const [awakeTimeTuesday, setAwakeTimeTuesday] = useState("");
@@ -57,60 +53,82 @@ const TimeTable = () => {
   const [awakeTime, setAwakeTime] = useState("");
   const [sleepTime, setSleepTime] = useState("");
 
-  const handleAwakeTimeMonday = (value) => {
-    setAwakeTimeMonday(value);
+  function createDateFromTime(time) {
+    const [hoursStr, minutesStr] = time.split(":");
+    const date = new Date();
+    date.setHours(parseInt(hoursStr, 10));
+    date.setMinutes(parseInt(minutesStr, 10));
+    console.log(date);
+    return date;
+  }
+  const handleAwakeTimeMonday = () => {
+    const date = createDateFromTime(refAwakeMonday.current.value);
+    setAwakeTimeMonday(date);
   };
 
-  const handleSleepTimeMonday = (value) => {
-    setSleepTimeMonday(value);
+  const handleSleepTimeMonday = () => {
+    const date = createDateFromTime(refSleepMonday.current.value);
+    setSleepTimeMonday(date);
   };
 
-  const handleAwakeTimeTuesday = (value) => {
-    setAwakeTimeTuesday(value);
+  const handleAwakeTimeTuesday = () => {
+    const date = createDateFromTime(refAwakeTuesday.current.value);
+    setAwakeTimeTuesday(date);
   };
 
-  const handleSleepTimeTuesday = (value) => {
-    setSleepTimeTuesday(value);
+  const handleSleepTimeTuesday = () => {
+    const date = createDateFromTime(refSleepTuesday.current.value);
+    setSleepTimeTuesday(date);
   };
 
-  const handleAwakeTimeWednesday = (value) => {
-    setAwakeTimeWednesday(value);
+  const handleAwakeTimeWednesday = () => {
+    const date = createDateFromTime(refAwakeWednesday.current.value);
+    setAwakeTimeWednesday(date);
   };
 
-  const handleSleepTimeWednesday = (value) => {
-    setSleepTimeWednesday(value);
+  const handleSleepTimeWednesday = () => {
+    const date = createDateFromTime(refSleepWednesday.current.value);
+    setSleepTimeWednesday(date);
   };
 
-  const handleAwakeTimeThursday = (value) => {
-    setAwakeTimeThursday(value);
+  const handleAwakeTimeThursday = () => {
+    const date = createDateFromTime(refAwakeThursday.current.value);
+    setAwakeTimeThursday(date);
   };
 
-  const handleSleepTimeThursday = (value) => {
-    setSleepTimeThursday(value);
+  const handleSleepTimeThursday = () => {
+    const date = createDateFromTime(refSleepThursday.current.value);
+    setSleepTimeThursday(date);
   };
 
-  const handleAwakeTimeFriday = (value) => {
-    setAwakeTimeFriday(value);
+  const handleAwakeTimeFriday = () => {
+    const date = createDateFromTime(refAwakeFriday.current.value);
+    setAwakeTimeFriday(date);
   };
 
-  const handleSleepTimeFriday = (value) => {
-    setSleepTimeFriday(value);
+  const handleSleepTimeFriday = () => {
+    const date = createDateFromTime(refSleepFriday.current.value);
+    setSleepTimeFriday(date);
   };
 
-  const handleAwakeTimeSaturday = (value) => {
-    setAwakeTimeSaturday(value);
+  const handleAwakeTimeSaturday = () => {
+    const date = createDateFromTime(refAwakeSaturday.current.value);
+    setAwakeTimeSaturday(date);
   };
 
-  const handleSleepTimeSaturday = (value) => {
-    setSleepTimeSaturday(value);
+  const handleSleepTimeSaturday = () => {
+    const date = createDateFromTime(refSleepSaturday.current.value);
+    setSleepTimeSaturday(date);
   };
 
-  const handleAwakeTimeSunday = (value) => {
-    setAwakeTimeSunday(value);
+  const handleAwakeTimeSunday = () => {
+    const date = createDateFromTime(refAwakeSunday.current.value);
+    setAwakeTimeSunday(date);
   };
 
-  const handleSleepTimeSunday = (value) => {
-    setSleepTimeSunday(value);
+  const handleSleepTimeSunday = () => {
+    const date = createDateFromTime(refSleepSunday.current.value);
+    setSleepTimeSunday(date);
   };
 
   const handleAwakeTime = (value) => {
@@ -175,12 +193,43 @@ const TimeTable = () => {
         sleepTimeSunday.getMinutes();
 
       // Calculate the average awake and sleep times
-      const averageAwakeTime = totalAwakeTime / 7;
-      const averageSleepTime = totalSleepTime / 7;
-
-      // Update the state variables
+      let averageAwakeTime = (totalAwakeTime / 7).toFixed(0);
       setAwakeTime(formatTime(averageAwakeTime));
+      averageAwakeTime = createDateFromTime(formatTime(averageAwakeTime));
+      let averageSleepTime = (totalSleepTime / 7).toFixed(0);
       setSleepTime(formatTime(averageSleepTime));
+      averageSleepTime = createDateFromTime(formatTime(averageSleepTime));
+
+      // update the user's data in the database
+      fetch("http://localhost:3000/api/users/updateMe", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          timeTable: {
+            awake: averageAwakeTime,
+            sleep: averageSleepTime,
+          },
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          localStorage.setItem("user", JSON.stringify(data?.data?.user));
+          auth.setUser(data?.data?.user);
+          toast.success("Time Table updated successfully!", {
+            position: "top-center",
+            icon: "👏",
+          });
+        })
+        .catch((err) => {
+          toast.error(err.message, {
+            position: "top-center",
+            icon: "💀",
+          });
+        });
     } else {
       // Alert if any input field is missed
       alert("Please fill in all input fields.");
@@ -192,9 +241,7 @@ const TimeTable = () => {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
 
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}`;
+    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -294,9 +341,7 @@ const TimeTable = () => {
             label="Enter awake time for Wednesday"
             ref={refAwakeWednesday}
             rightSection={
-              <ActionIcon
-                onClick={() => refAwakeWednesday.current.showPicker()}
-              >
+              <ActionIcon onClick={() => refAwakeWednesday.current.showPicker()}>
                 <AiOutlineClockCircle size="1rem" stroke={1.5} />
               </ActionIcon>
             }
@@ -313,9 +358,7 @@ const TimeTable = () => {
             label="Enter sleep time for Wednesday"
             ref={refSleepWednesday}
             rightSection={
-              <ActionIcon
-                onClick={() => refSleepWednesday.current.showPicker()}
-              >
+              <ActionIcon onClick={() => refSleepWednesday.current.showPicker()}>
                 <AiOutlineClockCircle size="1rem" stroke={1.5} />
               </ActionIcon>
             }
@@ -465,11 +508,7 @@ const TimeTable = () => {
           />
         </SimpleGrid>
         <Group my={"md"} style={{ width: "100%" }}>
-          <Button
-            style={{ backgroundColor: Colors.primary }}
-            fullWidth
-            type="submit"
-          >
+          <Button style={{ backgroundColor: Colors.primary }} fullWidth type="submit">
             <Text style={{ color: Colors.white }}>Submit</Text>
           </Button>
         </Group>
@@ -489,15 +528,11 @@ const TimeTable = () => {
           <div style={{ marginTop: "1rem", textAlign: "center" }}>
             <Text style={{ fontSize: "1.2rem", color: Colors.white }}>
               Average Awake Time:
-              <Text style={{ fontSize: "1.1rem", color: Colors.secondary }}>
-                {awakeTime} hours
-              </Text>
+              <Text style={{ fontSize: "1.1rem", color: Colors.secondary }}>{awakeTime} hours</Text>
             </Text>
             <Text style={{ fontSize: "1.2rem", color: Colors.white }}>
               Average Sleep Time:
-              <Text style={{ fontSize: "1.1rem", color: Colors.secondary }}>
-                {sleepTime} hours
-              </Text>
+              <Text style={{ fontSize: "1.1rem", color: Colors.secondary }}>{sleepTime} hours</Text>
             </Text>
           </div>
         )}
