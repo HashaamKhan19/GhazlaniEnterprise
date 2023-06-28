@@ -49,12 +49,21 @@ const Notification = ({ notifications }) => {
         </Menu.Target>
 
         <Menu.Dropdown style={{ maxHeight: "20rem", overflowY: "scroll" }}>
+          {notifications.length === 0 && (
+            <Menu.Item>There are no notifications</Menu.Item>
+          )}
           {notifications.map((notif, idx) => (
             <Menu.Item key={idx}>
               <div
-                style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
-                <span style={{ fontSize: "15px" }}>Question has been created</span>
+                <span style={{ fontSize: "15px" }}>
+                  Question has been created
+                </span>
                 <span style={{ fontSize: "12px", fontStyle: "italic" }}>
                   {getFormattedDateTime(notif?.createdAt)}
                 </span>

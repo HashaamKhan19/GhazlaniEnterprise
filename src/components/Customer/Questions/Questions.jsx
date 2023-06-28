@@ -3,7 +3,16 @@ import { useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-import { Button, Group, Paper, Stack, Text, Textarea, Timeline } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Loader,
+  Paper,
+  Stack,
+  Text,
+  Textarea,
+  Timeline,
+} from "@mantine/core";
 
 import Colors from "../../../utils/Colors";
 import { AuthContext } from "../../../context/authContext";
@@ -15,12 +24,15 @@ const Questions = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/questions/dailyQuestion/${auth.user.currentLevel}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-      },
-    })
+    fetch(
+      `http://localhost:3000/api/questions/dailyQuestion/${auth.user.currentLevel}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      }
+    )
       .then((res) => {
         return res.json();
       })
@@ -47,14 +59,19 @@ const Questions = () => {
         Authorization: `Bearer ${auth.token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ questionId: question?._id, answer: inputRef.current.value }),
+      body: JSON.stringify({
+        questionId: question?._id,
+        answer: inputRef.current.value,
+      }),
     })
       .then((res) => {
         if (res.ok) {
           return res.json();
         } else {
           return res.json().then((err) => {
-            throw new Error(err.message || "Request failed with status " + err.status);
+            throw new Error(
+              err.message || "Request failed with status " + err.status
+            );
           });
         }
       })
@@ -76,7 +93,19 @@ const Questions = () => {
         setIsLoading(false);
       });
   };
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Loader size={"xl"} color={Colors.secondary} />
+      </div>
+    );
   return (
     <div>
       <Text c={Colors.white} size={26} p={"xs"} mb={"xs"}>
