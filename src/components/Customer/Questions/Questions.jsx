@@ -3,16 +3,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-import {
-  Button,
-  Group,
-  Loader,
-  Paper,
-  Stack,
-  Text,
-  Textarea,
-  Timeline,
-} from "@mantine/core";
+import { Button, Group, Loader, Paper, Stack, Text, Textarea, Timeline } from "@mantine/core";
 
 import Colors from "../../../utils/Colors";
 import { AuthContext } from "../../../context/authContext";
@@ -24,15 +15,12 @@ const Questions = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(
-      `http://localhost:3000/api/questions/dailyQuestion/${auth.user.currentLevel}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      }
-    )
+    fetch(`http://localhost:3000/api/questions/dailyQuestion/${auth.user.currentLevel}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    })
       .then((res) => {
         return res.json();
       })
@@ -69,9 +57,7 @@ const Questions = () => {
           return res.json();
         } else {
           return res.json().then((err) => {
-            throw new Error(
-              err.message || "Request failed with status " + err.status
-            );
+            throw new Error(err.message || "Request failed with status " + err.status);
           });
         }
       })
@@ -79,7 +65,7 @@ const Questions = () => {
         console.log(data);
         localStorage.setItem("user", JSON.stringify(data?.data?.user));
         auth.setUser(data?.data?.user);
-        toast.success("Answer submitted successfully!", {
+        toast.success(data?.message || "Answer submitted successfully!", {
           position: "top-center",
           icon: "👏",
         });

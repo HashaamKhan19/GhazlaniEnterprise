@@ -23,7 +23,12 @@ const Statistics = () => {
   };
 
   // get the number of days till the end of level and divide by 7 to get the number of weeks
-  let weeksLeft = getDaysDifference(levels.level_1.duration) / 7;
+  let weeksLeft;
+  if (auth.user.currentLevel == 1) {
+    weeksLeft = getDaysDifference(levels.level_1.duration) / 7;
+  } else {
+    weeksLeft = getDaysDifference(levels.level_2.duration) / 7;
+  }
   weeksLeft = weeksLeft.toFixed(0);
   const data = [
     {
