@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useRef, useState, useContext } from "react";
 import { AiOutlineWarning } from "react-icons/ai";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -45,7 +46,13 @@ export default function SignUp() {
       .then((res) => {
         console.log(res.data);
         setLoading(false);
+        toast.success("Account created successfully");
         navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        setLoading(false);
+        toast.error(err.response.data.message);
       });
   };
   return (
