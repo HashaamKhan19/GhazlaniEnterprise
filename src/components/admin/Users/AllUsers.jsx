@@ -68,8 +68,6 @@ export default function AllUsers() {
     fetchData();
   }, []);
 
-  // console.log("data: ", usersData);
-
   const rows = loading ? (
     <tr>
       <td colSpan="12">
@@ -125,7 +123,16 @@ export default function AllUsers() {
           {row.currentLevel}
         </td>
         <td>
-          <ActionIcons id={row._id} />
+          <ActionIcons
+            id={row._id}
+            name={row.name}
+            email={row.email}
+            image={row.image}
+            attendancePercentage={row.attendancePercentage}
+            currentLevel={row.currentLevel}
+            blocked={row.blocked}
+            role={row.role}
+          />
         </td>
       </tr>
     ))
