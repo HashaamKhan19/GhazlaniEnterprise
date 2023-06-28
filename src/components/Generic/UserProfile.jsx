@@ -8,6 +8,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { AuthContext } from "../../context/authContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineLock } from "react-icons/ai";
 
 const UserProfile = () => {
   const match768 = useMediaQuery("(max-width: 768px)");
@@ -72,6 +73,20 @@ const UserProfile = () => {
             }}
           >
             Settings
+          </Menu.Item>
+
+          <Menu.Item
+            icon={<AiOutlineLock size={16} />}
+            c={Colors.main}
+            onClick={() => {
+              navigate("/changePassword", {
+                state: {
+                  userData: userData,
+                },
+              });
+            }}
+          >
+            Update Password
           </Menu.Item>
           <Menu.Item
             icon={<BiLogOutCircle size={16} />}
