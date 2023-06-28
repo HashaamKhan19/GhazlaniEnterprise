@@ -8,6 +8,7 @@ import RequireAuth from "./context/RequireAuth";
 import UserProfileDetails from "./components/Generic/UserProfileDetails";
 import AdminLayout from "./components/admin/Dashboard/index";
 import ChangePassword from "./components/auth/ChangePassword";
+import Results from "./components/admin/Questions/Results";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/userDetails" element={<UserProfileDetails />} />
           <Route path="/admin" element={<AdminLayout />} />
           <Route path="/changePassword" element={<ChangePassword />} />
+          <Route path="/results" element={<Results />} />
         </Route>
       </Routes>
     </Router>

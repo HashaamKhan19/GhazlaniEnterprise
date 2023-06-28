@@ -1,4 +1,5 @@
 import { AiOutlineQuestionCircle, AiOutlineUser } from "react-icons/ai";
+import { BiNotepad } from "react-icons/bi";
 
 const links = [
   {
@@ -12,6 +13,12 @@ const links = [
     text: "Questions",
     url: "/questions",
     icon: AiOutlineQuestionCircle,
+  },
+  {
+    id: 3,
+    text: "Results",
+    url: "/results",
+    icon: BiNotepad,
   },
 ];
 

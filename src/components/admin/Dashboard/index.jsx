@@ -15,6 +15,7 @@ import UserProfile from "../../Generic/UserProfile";
 import AllUsers from "../Users/AllUsers";
 import Questions from "../Questions/Questions";
 import { AuthContext } from "../../../context/authContext";
+import Results from "../Questions/Results";
 
 function AdminLayout() {
   const [activeLink, setActiveLink] = useState(1);
@@ -104,6 +105,8 @@ function AdminLayout() {
           <AllUsers />
         ) : activeLink === 2 ? (
           <Questions />
+        ) : activeLink === 3 ? (
+          <Results />
         ) : null}
       </AppShell>
 
