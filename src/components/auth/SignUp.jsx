@@ -8,6 +8,7 @@ import {
   Group,
   Button,
   Stack,
+  FileInput,
 } from "@mantine/core";
 import Colors from "../../utils/Colors";
 import { useNavigate } from "react-router-dom";
@@ -21,18 +22,25 @@ export default function SignUp() {
   const nameRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
+  const [image, setImage] = useState();
 
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
+    let formData = new FormData();
+    formData.append("name", nameRef.current.value);
+    formData.append("email", emailRef.current.value);
+    formData.append("password", passwordRef.current.value);
+    formData.append("passwordConfirm", passwordConfirmRef.current.value);
+    formData.append("image", image);
+
     axios
-      .post("http://localhost:3000/api/users/signup", {
-        name: nameRef.current.value,
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
-        passwordConfirm: passwordConfirmRef.current.value,
+      .post("http://localhost:3000/api/users/signup", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
         console.log(res.data);
@@ -121,6 +129,18 @@ export default function SignUp() {
                   },
                 }}
                 ref={passwordConfirmRef}
+              />
+              <FileInput
+                label="Upload Image"
+                placeholder="Upload Image"
+                accept="image/png,image/jpeg"
+                styles={{
+                  label: {
+                    color: Colors.white,
+                    fontSize: "1.2rem",
+                  },
+                }}
+                onChange={setImage}
               />
             </Stack>
 

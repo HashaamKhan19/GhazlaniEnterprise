@@ -43,7 +43,7 @@ const UserProfile = () => {
     >
       <Menu width={"auto"} position="bottom-end" withArrow>
         <Menu.Target>
-          <Avatar radius="xl" src={"https://picsum.photos/200/300"} />
+          <Avatar radius="xl" src={user?.image} />
         </Menu.Target>
 
         <Menu.Dropdown>
