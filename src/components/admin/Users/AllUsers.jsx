@@ -9,7 +9,6 @@ import {
   Loader,
   Text,
 } from "@mantine/core";
-import data from "./users";
 import ActionIcons from "../../Generic/ActionIcons";
 import Colors from "../../../utils/Colors";
 import { useEffect, useState } from "react";
@@ -171,7 +170,7 @@ export default function AllUsers() {
       </div>
       {loading ? null : usersData?.data?.users?.length === 0 ? null : (
         <Pagination
-          total={10}
+          // total={10}
           position="right"
           pr={"xl"}
           styles={(theme) => ({

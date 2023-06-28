@@ -29,6 +29,44 @@ export default function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (
+      !emailRef.current.value ||
+      !passwordRef.current.value ||
+      !passwordConfirmRef.current.value ||
+      !nameRef.current.value
+    ) {
+      toast.error("Please fill all fields");
+      setLoading(false);
+      return;
+    }
+
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+      toast.error("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
+    if (passwordRef.current.value.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      setLoading(false);
+      return;
+    }
+
+    const emailRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+    if (!emailRegex.test(emailRef.current.value)) {
+      toast.error("Please enter a valid email");
+      setLoading(false);
+      return;
+    }
+
+    if (!image) {
+      toast.error("Please upload an image");
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     let formData = new FormData();
     formData.append("name", nameRef.current.value);
