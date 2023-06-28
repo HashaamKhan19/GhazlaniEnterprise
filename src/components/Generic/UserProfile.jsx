@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 const UserProfile = () => {
   const match768 = useMediaQuery("(max-width: 768px)");
 
-  const { logout, user } = useContext(AuthContext);
+  const { logout, token, user } = useContext(AuthContext);
 
   const [userData, setUserData] = React.useState({});
 
@@ -23,7 +23,7 @@ const UserProfile = () => {
       try {
         const response = await axios.get("http://localhost:3000/api/users/me", {
           headers: {
-            Authorization: `Bearer ${user?.token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         setUserData(response?.data?.data?.user);

@@ -5,7 +5,7 @@ export const AuthContext = createContext({
   setUser: () => {},
   logout: () => {},
   token: null,
-  setToken: () => {},
+  setJWT: () => {},
 });
 
 // eslint-disable-next-line react/prop-types

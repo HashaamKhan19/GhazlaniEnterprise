@@ -10,20 +10,23 @@ import Tracking from "../Customer/Tracking/Tracking";
 import { useDisclosure, useInterval, useMediaQuery } from "@mantine/hooks";
 import { AuthContext } from "../../context/authContext";
 import { toast } from "react-hot-toast";
-import { BiBell, BiBellPlus } from "react-icons/bi";
-import { FaBell } from "react-icons/fa";
 import Notification from "../Generic/Notification";
+import { useNavigate } from "react-router-dom";
 
 function AppLayout() {
   const [activeLink, setActiveLink] = useState(1);
   const [opened, { toggle }] = useDisclosure(false);
   const [notifications, setNotifications] = useState([]);
-
+  const [isFetching, setIsFetching] = useState(true);
   const match768 = useMediaQuery("(max-width: 768px)");
-
+  const navigate = useNavigate();
+  const notifcations = JSON.parse(localStorage.getItem("notifications"));
   const { user, token } = useContext(AuthContext);
+
   const interval = useInterval(() => {
-    fetch("http://localhost:3000/api/questions/dailyQuestion", {
+    console.log(interval);
+    if (!isFetching) return;
+    fetch(`http://localhost:3000/api/questions/dailyQuestion/${user.currentLevel}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -34,18 +37,41 @@ function AppLayout() {
           return res.json();
         } else {
           return res.json().then((err) => {
+            // throw an error so that it can be caught in catch block to display toast message
             throw new Error(err.message || "Request failed with status " + err.status);
           });
         }
       })
       .then((data) => {
-        setNotifications((pervStatus) => [
-          ...pervStatus,
-          {
-            status: true,
-            createdAt: data?.data?.question?.createdAt,
-          },
-        ]);
+        const createdAt = data?.data?.question?.createdAt;
+        setNotifications((prevStatus) => {
+          // if a notification with the same createdAt already exists, don't add it to the array
+          if (prevStatus[prevStatus.length - 1]?.createdAt === createdAt) {
+            // stop fetching and return the already existing notifcations array.
+            setIsFetching(false);
+            return prevStatus;
+          } else {
+            setIsFetching(false);
+            // append the new notification to the notifications array and save in localStorage
+            localStorage.setItem(
+              "notifcations",
+              JSON.stringify([
+                ...prevStatus,
+                {
+                  status: true,
+                  createdAt: createdAt,
+                },
+              ])
+            );
+            return [
+              ...prevStatus,
+              {
+                status: true,
+                createdAt: createdAt,
+              },
+            ];
+          }
+        });
         // setIsLoading(false);
         console.log(data?.data?.question);
       })
@@ -55,14 +81,21 @@ function AppLayout() {
           icon: "💀",
         });
       });
-  }, 1000 * 60 * 10);
+  }, 1000);
 
   useEffect(() => {
     if (localStorage.getItem("userType") !== "user") {
       localStorage.clear();
-      window.location.href = "/login";
+      navigate("/login");
     }
-    interval.start();
+    if (notifcations?.length > 0) {
+      setNotifications(notifcations);
+    }
+    if (!isFetching) {
+      interval.stop();
+    } else {
+      interval.start();
+    }
     return () => {
       interval.stop;
     };
