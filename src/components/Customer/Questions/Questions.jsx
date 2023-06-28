@@ -15,7 +15,7 @@ const Questions = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/questions/dailyQuestion", {
+    fetch(`http://localhost:3000/api/questions/dailyQuestion/${auth.user.currentLevel}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${auth.token}`,
@@ -37,7 +37,7 @@ const Questions = () => {
     return () => {
       setQuestion(null);
     };
-  }, [auth.token]);
+  }, [auth.token, auth.user.currentLevel]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -89,45 +89,54 @@ const Questions = () => {
             Question:{" "}
           </Text>
           <Text c={Colors.white} size={16}>
-            {question?.question}
+            {question ? (
+              question?.question
+            ) : (
+              <div>
+                <h2 style={{ color: "white" }}>No question for today yet</h2>
+              </div>
+            )}
           </Text>
         </Stack>
       </Paper>
-      <form onSubmit={handleSubmit}>
-        <Paper mt={"xl"} radius={"lg"} p={"lg"}>
-          <Stack>
-            <Textarea
-              placeholder="Type your answer here"
-              label="Answer"
-              styles={{
-                label: {
-                  color: Colors.black,
-                  fontSize: "18px",
-                },
-              }}
-              minRows={4}
-              ref={inputRef}
-            />
-            <Group position="right">
-              <Button
-                style={{
-                  backgroundColor: Colors.secondary,
-                  color: Colors.white,
-                  border: "none",
-                  borderRadius: "10px",
-                  padding: "10px 20px",
-                  fontSize: "16px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
+
+      {question && (
+        <form onSubmit={handleSubmit}>
+          <Paper mt={"xl"} radius={"lg"} p={"lg"}>
+            <Stack>
+              <Textarea
+                placeholder="Type your answer here"
+                label="Answer"
+                styles={{
+                  label: {
+                    color: Colors.black,
+                    fontSize: "18px",
+                  },
                 }}
-                type="submit"
-              >
-                Submit
-              </Button>
-            </Group>
-          </Stack>
-        </Paper>
-      </form>
+                minRows={4}
+                ref={inputRef}
+              />
+              <Group position="right">
+                <Button
+                  style={{
+                    backgroundColor: Colors.secondary,
+                    color: Colors.white,
+                    border: "none",
+                    borderRadius: "10px",
+                    padding: "10px 20px",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              </Group>
+            </Stack>
+          </Paper>
+        </form>
+      )}
     </div>
   );
 };
