@@ -52,10 +52,12 @@ export default function SignUp() {
     <div
       style={{
         backgroundColor: Colors.main,
-        height: "100vh",
+        height: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        paddingTop: "2rem",
+        paddingBottom: "2rem",
       }}
     >
       <Stack

@@ -30,8 +30,7 @@ const ActionIcons = ({
   blocked,
   role,
 }) => {
-  const [deleteOpened, { open: deleteOpen, close: deleteClose }] =
-    useDisclosure(false);
+  const [deleteOpened, { open: deleteOpen, close }] = useDisclosure(false);
   const [viewOpened, { open: viewOpen, close: viewClose }] =
     useDisclosure(false);
   const [loading, setLoading] = React.useState(false);
@@ -51,17 +50,19 @@ const ActionIcons = ({
 
       console.log(response);
 
-      if (response?.data?.status === "success") {
+      if (response?.status === 204) {
         console.log("response: ", response);
         toast.success("User deleted successfully", {
           position: "top-center",
         });
         setLoading(false);
+        close();
       } else {
         toast.error(response.data.message, {
           position: "top-center",
         });
         setLoading(false);
+        close();
       }
     } catch (error) {
       console.log(error);
@@ -69,6 +70,7 @@ const ActionIcons = ({
         position: "top-center",
       });
       setLoading(false);
+      close();
     }
   }
 
@@ -155,7 +157,7 @@ const ActionIcons = ({
       {/* Deleting a user modal */}
       <Modal
         opened={deleteOpened}
-        onClose={deleteClose}
+        onClose={close}
         title="Deletion Confirmation"
         centered
         overlayProps={{
