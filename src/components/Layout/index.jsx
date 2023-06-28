@@ -23,6 +23,20 @@ function AppLayout() {
   const notifcations = JSON.parse(localStorage.getItem("notifications"));
   const { user, token } = useContext(AuthContext);
 
+  function awakeTime() {
+    const date = new Date().toISOString(); // get current date: e.g output= 2021-08-18T10:30:00.000Z
+    const awakeTime = user.timeTable?.awake;
+    const sleepTime = user.timeTable?.sleep;
+    // subtract the 2 ISO string
+    const awakeDiff = new Date(awakeTime) - new Date(date);
+    const sleepDiff = new Date(sleepTime) - new Date(date);
+    if (awakeDiff <= 0 && sleepDiff >= 0) {
+      return true;
+    } else {
+      console.log("still time left");
+      return false;
+    }
+  }
   const interval = useInterval(() => {
     console.log(interval);
     if (!isFetching) return;
@@ -81,10 +95,10 @@ function AppLayout() {
           icon: "💀",
         });
       });
-  }, 1000);
+  }, 10000);
 
   useEffect(() => {
-    if (localStorage.getItem("userType") !== "user") {
+    if (user.role !== "user") {
       localStorage.clear();
       navigate("/login");
     }
@@ -94,7 +108,14 @@ function AppLayout() {
     if (!isFetching) {
       interval.stop();
     } else {
-      interval.start();
+      // if the user awake and sleep time are within the current time, start fetching
+      if (awakeTime()) {
+        setIsFetching(true);
+        interval.start();
+      } else {
+        // if the user awake and sleep time are not within the current time, stop fetching
+        setIsFetching(false);
+      }
     }
     return () => {
       interval.stop;
