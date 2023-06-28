@@ -30,12 +30,12 @@ const ActionIcons = ({
   blocked,
   role,
 }) => {
-  const [active, setActive] = React.useState(false);
   const [deleteOpened, { open: deleteOpen, close: deleteClose }] =
     useDisclosure(false);
   const [viewOpened, { open: viewOpen, close: viewClose }] =
     useDisclosure(false);
   const [loading, setLoading] = React.useState(false);
+  const [loading2, setLoading2] = React.useState(false);
 
   async function handleDelete() {
     setLoading(true);
@@ -72,6 +72,42 @@ const ActionIcons = ({
     }
   }
 
+  async function handleUserStatus() {
+    setLoading2(true);
+    try {
+      const response = await axios.patch(
+        `http://localhost:3000/api/users/${id}`,
+        {
+          blocked: !blocked,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response?.data?.status === "success") {
+        console.log("response: ", response);
+        toast.success("User updated successfully", {
+          position: "top-center",
+        });
+        setLoading2(false);
+      } else {
+        toast.error(response.data.message, {
+          position: "top-center",
+        });
+        setLoading2(false);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message, {
+        position: "top-center",
+      });
+      setLoading2(false);
+    }
+  }
+
   return (
     <>
       <Group position="center" noWrap>
@@ -82,19 +118,25 @@ const ActionIcons = ({
               compact
               radius={"xl"}
               style={
-                active
-                  ? { borderColor: Colors.secondary }
-                  : { borderColor: Colors.red }
+                blocked
+                  ? { borderColor: Colors.red }
+                  : { borderColor: Colors.secondary }
               }
-              c={active ? Colors.secondary : Colors.red}
+              c={blocked ? Colors.red : Colors.secondary}
             >
-              {active ? "Active" : "Blocked"}
+              {blocked ? "Blocked" : "Active"}
             </Button>
           </Menu.Target>
 
           <Menu.Dropdown>
-            <Menu.Item onClick={() => setActive(!active)}>
-              {active ? "Block" : "Activate"}
+            <Menu.Item onClick={handleUserStatus}>
+              {loading2 ? (
+                <Loader color={Colors.secondary} size={"xs"} />
+              ) : (
+                <Text c={Colors.black} fw={500}>
+                  {blocked ? "Activate" : "Block"}
+                </Text>
+              )}
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
