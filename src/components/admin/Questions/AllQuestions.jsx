@@ -9,7 +9,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import Colors from "../../../utils/Colors";
-import data from "./answer";
 import axios from "axios";
 
 // eslint-disable-next-line react/prop-types

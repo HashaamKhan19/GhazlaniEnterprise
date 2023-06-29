@@ -10,9 +10,7 @@ import {
   rem,
 } from "@mantine/core";
 import React, { useState } from "react";
-import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import Colors from "../../../utils/Colors";
-import data from "./answerDetails";
 import { AiOutlineEye } from "react-icons/ai";
 import { useDisclosure } from "@mantine/hooks";
 
