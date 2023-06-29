@@ -10,6 +10,7 @@ export default function Results() {
   const navigate = useNavigate();
 
   const [check, setCheck] = useState(false);
+  const [answerData, setAnswerData] = useState([]);
 
   return (
     <>
@@ -33,9 +34,19 @@ export default function Results() {
         </Group>
 
         {check ? (
-          <QuestionDetails check={check} setCheck={setCheck} />
+          <QuestionDetails
+            check={check}
+            setCheck={setCheck}
+            answerData={answerData}
+            setAnswerData={setAnswerData}
+          />
         ) : (
-          <AllQuestions check={check} setCheck={setCheck} />
+          <AllQuestions
+            check={check}
+            setCheck={setCheck}
+            answerData={answerData}
+            setAnswerData={setAnswerData}
+          />
         )}
       </Paper>
     </>

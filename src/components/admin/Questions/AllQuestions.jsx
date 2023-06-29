@@ -1,11 +1,19 @@
-import { ActionIcon, Center, Table, createStyles, rem } from "@mantine/core";
-import React from "react";
+import {
+  ActionIcon,
+  Center,
+  Loader,
+  Table,
+  createStyles,
+  rem,
+} from "@mantine/core";
+import React, { useEffect, useState } from "react";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import Colors from "../../../utils/Colors";
 import data from "./answer";
+import axios from "axios";
 
 // eslint-disable-next-line react/prop-types
-const AllQuestions = ({ check, setCheck }) => {
+const AllQuestions = ({ check, setCheck, answerData, setAnswerData }) => {
   const useStyles = createStyles((theme) => ({
     header: {
       position: "sticky",
@@ -42,40 +50,84 @@ const AllQuestions = ({ check, setCheck }) => {
 
   const { classes, cx } = useStyles();
 
-  const rows = data.map((row) => (
-    <tr key={row.id}>
-      <td style={{ fontSize: "1rem", textAlign: "left" }}>{row.id}</td>
-      <td
-        className={cx(classes.createdColumn)}
-        style={{ fontSize: "1rem", textAlign: "left" }}
-      >
-        {row.createdOn}
-      </td>
-      <td
-        className={cx(classes.accountLevelColumn)}
-        style={{ fontSize: "1rem", textAlign: "left" }}
-      >
-        {row.accountLevel}
-      </td>
-      <td
-        className={cx(classes.questionColumn)}
-        style={{ fontSize: "1rem", textAlign: "left" }}
-      >
-        {row.Question}
-      </td>
-      <td>
+  const [loading, setLoading] = useState(false);
+  const [questionsResults, setQuestionsResults] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const result = await axios.get("http://localhost:3000/api/questions", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setQuestionsResults(result?.data?.data?.questions);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  const handleAnswerData = (data) => {
+    setAnswerData(data);
+  };
+
+  const rows = loading ? (
+    <tr>
+      <td colSpan="12">
         <Center>
-          <ActionIcon
-            onClick={() => {
-              setCheck(!check);
-            }}
-          >
-            <HiOutlineArrowNarrowRight size={22} color={Colors.primary} />
-          </ActionIcon>
+          <Loader
+            size={"md"}
+            variant="dots"
+            my={"xl"}
+            color={Colors.secondary}
+          />
         </Center>
       </td>
     </tr>
-  ));
+  ) : (
+    questionsResults.map((row) => (
+      <tr key={row._id}>
+        <td style={{ fontSize: "1rem", textAlign: "left" }}>
+          {questionsResults.indexOf(row) + 1}
+        </td>
+        <td
+          className={cx(classes.createdColumn)}
+          style={{ fontSize: "1rem", textAlign: "left" }}
+        >
+          {/* {row.createdAt} */}
+          {/* {new Date(row.createdAt).toLocaleDateString()} */}
+          {new Date(row.createdAt).toLocaleString(undefined, {
+            dateStyle: "medium",
+            timeStyle: "medium",
+          })}
+        </td>
+        <td
+          className={cx(classes.accountLevelColumn)}
+          style={{ fontSize: "1rem", textAlign: "left" }}
+        >
+          {row.questionLevel}
+        </td>
+        <td
+          className={cx(classes.questionColumn)}
+          style={{ fontSize: "1rem", textAlign: "left" }}
+        >
+          {row.title}
+        </td>
+        <td>
+          <Center>
+            <ActionIcon
+              onClick={() => {
+                setCheck(!check);
+                handleAnswerData(row.answeredBy);
+              }}
+            >
+              <HiOutlineArrowNarrowRight size={22} color={Colors.primary} />
+            </ActionIcon>
+          </Center>
+        </td>
+      </tr>
+    ))
+  );
 
   return (
     <div className={cx(classes.table)}>
@@ -87,9 +139,11 @@ const AllQuestions = ({ check, setCheck }) => {
               Created On
             </th>
             <th style={{ fontSize: "1.1rem", textAlign: "left" }}>
-              Account Level
+              Question Level
             </th>
-            <th style={{ fontSize: "1.1rem", textAlign: "left" }}>Question</th>
+            <th style={{ fontSize: "1.1rem", textAlign: "left" }}>
+              Question Title
+            </th>
             <th style={{ fontSize: "1.1rem", textAlign: "center" }}>Action</th>
           </tr>
         </thead>
