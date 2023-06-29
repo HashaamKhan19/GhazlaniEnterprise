@@ -72,7 +72,12 @@ const Dashboard = () => {
           width: "99.9%",
         }}
       >
-        <AttendanceChart colors={colors} series={series} labels={labels} lineColor={lineColor} />
+        <AttendanceChart
+          colors={colors}
+          series={series}
+          labels={labels}
+          lineColor={lineColor}
+        />
       </div>
       <SimpleGrid
         cols={2}
@@ -82,12 +87,12 @@ const Dashboard = () => {
         ]}
         pt={"xl"}
       >
-        <QuestionsChart
+        {/* <QuestionsChart
           colors={colors}
           series={QuestionSeries}
           labels={QuestionLabels}
           lineColor={lineColor}
-        />
+        /> */}
         <Tasks />
       </SimpleGrid>
       <br />

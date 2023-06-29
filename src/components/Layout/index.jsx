@@ -1,4 +1,13 @@
-import { AppShell, Burger, Drawer, Group, Header, Navbar, Stack, Text } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Drawer,
+  Group,
+  Header,
+  Navbar,
+  Stack,
+  Text,
+} from "@mantine/core";
 import Colors from "../../utils/Colors";
 import UserProfile from "../Generic/UserProfile";
 import Sidebar from "./Sidebar";
@@ -40,19 +49,24 @@ function AppLayout() {
   const interval = useInterval(() => {
     console.log(interval);
     if (!isFetching) return;
-    fetch(`http://localhost:3000/api/questions/dailyQuestion/${user.currentLevel}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      `http://localhost:3000/api/questions/dailyQuestion/${user.currentLevel}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then((res) => {
         if (res.ok) {
           return res.json();
         } else {
           return res.json().then((err) => {
             // throw an error so that it can be caught in catch block to display toast message
-            throw new Error(err.message || "Request failed with status " + err.status);
+            throw new Error(
+              err.message || "Request failed with status " + err.status
+            );
           });
         }
       })
@@ -142,7 +156,12 @@ function AppLayout() {
           </Navbar>
         }
         header={
-          <Header height={60} p="xs" bg={Colors.primary} style={{ borderWidth: 0 }}>
+          <Header
+            height={60}
+            p="xs"
+            bg={Colors.primary}
+            style={{ borderWidth: 0 }}
+          >
             <div
               style={{
                 display: "flex",
@@ -159,7 +178,12 @@ function AppLayout() {
                   gap: 10,
                 }}
               >
-                <Burger color={Colors.white} opened={opened} onClick={toggle} hidden={!match768} />
+                <Burger
+                  color={Colors.white}
+                  opened={opened}
+                  onClick={toggle}
+                  hidden={!match768}
+                />
                 <Text
                   color={Colors.red}
                   style={{
@@ -188,8 +212,6 @@ function AppLayout() {
         ) : activeLink === 2 ? (
           <Questions />
         ) : activeLink === 3 ? (
-          <Tracking />
-        ) : activeLink === 4 ? (
           <TimeTable />
         ) : null}
       </AppShell>
@@ -206,7 +228,11 @@ function AppLayout() {
         }}
       >
         <Stack>
-          <Sidebar activeLink={activeLink} setActiveLink={setActiveLink} toggle={toggle} />
+          <Sidebar
+            activeLink={activeLink}
+            setActiveLink={setActiveLink}
+            toggle={toggle}
+          />
         </Stack>
       </Drawer>
     </>
