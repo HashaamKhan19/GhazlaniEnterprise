@@ -28,9 +28,7 @@ const useStyles = createStyles((theme) => ({
       right: 0,
       bottom: 0,
       borderBottom: `${rem(1)} solid ${
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[3]
-          : theme.colors.gray[2]
+        theme.colorScheme === "dark" ? theme.colors.dark[3] : theme.colors.gray[2]
       }`,
     },
   },
@@ -69,7 +67,7 @@ export default function AllUsers() {
           },
         }
       );
-      setTotalPages(Math.ceil(result?.data?.data?.totalDocs / limit));
+      setTotalPages(Math.ceil(result?.data?.totalDocs / limit));
       setUsersData(result?.data);
       setLoading(false);
     };
@@ -80,12 +78,7 @@ export default function AllUsers() {
     <tr>
       <td colSpan="12">
         <Center>
-          <Loader
-            size={"md"}
-            variant="dots"
-            my={"xl"}
-            color={Colors.secondary}
-          />
+          <Loader size={"md"} variant="dots" my={"xl"} color={Colors.secondary} />
         </Center>
       </td>
     </tr>
@@ -153,16 +146,10 @@ export default function AllUsers() {
           <thead className={cx(classes.header)}>
             <tr>
               <th style={{ fontSize: "1.1rem", color: Colors.main }}>Image</th>
-              <th style={{ fontSize: "1.1rem", color: Colors.main }}>
-                Username
-              </th>
+              <th style={{ fontSize: "1.1rem", color: Colors.main }}>Username</th>
               <th style={{ fontSize: "1.1rem", color: Colors.main }}>Email</th>
-              <th style={{ fontSize: "1.1rem", color: Colors.main }}>
-                Attendance
-              </th>
-              <th style={{ fontSize: "1.1rem", textAlign: "center" }}>
-                Account Level
-              </th>
+              <th style={{ fontSize: "1.1rem", color: Colors.main }}>Attendance</th>
+              <th style={{ fontSize: "1.1rem", textAlign: "center" }}>Account Level</th>
               <th
                 style={{
                   fontSize: "1.1rem",
