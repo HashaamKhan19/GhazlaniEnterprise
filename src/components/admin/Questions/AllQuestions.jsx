@@ -2,6 +2,8 @@ import {
   ActionIcon,
   Center,
   Loader,
+  Pagination,
+  Paper,
   Table,
   createStyles,
   rem,
@@ -17,8 +19,7 @@ const AllQuestions = ({ check, setCheck, answerData, setAnswerData }) => {
     header: {
       position: "sticky",
       top: 0,
-      backgroundColor:
-        theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
       transition: "box-shadow 150ms ease",
 
       "&::after": {
@@ -28,9 +29,7 @@ const AllQuestions = ({ check, setCheck, answerData, setAnswerData }) => {
         right: 0,
         bottom: 0,
         borderBottom: `${rem(1)} solid ${
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[3]
-            : theme.colors.gray[2]
+          theme.colorScheme === "dark" ? theme.colors.dark[3] : theme.colors.gray[2]
         }`,
       },
     },
@@ -43,7 +42,7 @@ const AllQuestions = ({ check, setCheck, answerData, setAnswerData }) => {
     createdColumn: {},
     accountLevelColumn: {},
     questionColumn: {
-      minWidth: "300px",
+      minWidth: "220px",
     },
   }));
 
@@ -51,20 +50,27 @@ const AllQuestions = ({ check, setCheck, answerData, setAnswerData }) => {
 
   const [loading, setLoading] = useState(false);
   const [questionsResults, setQuestionsResults] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const result = await axios.get("http://localhost:3000/api/questions", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const result = await axios.get(
+        `http://localhost:3000/api/questions?limit=${limit}&page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setTotalPages(Math.ceil(result?.data?.totalDocs / limit));
       setQuestionsResults(result?.data?.data?.questions);
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [limit, page]);
 
   const handleAnswerData = (data) => {
     setAnswerData(data);
@@ -74,25 +80,15 @@ const AllQuestions = ({ check, setCheck, answerData, setAnswerData }) => {
     <tr>
       <td colSpan="12">
         <Center>
-          <Loader
-            size={"md"}
-            variant="dots"
-            my={"xl"}
-            color={Colors.secondary}
-          />
+          <Loader size={"md"} variant="dots" my={"xl"} color={Colors.secondary} />
         </Center>
       </td>
     </tr>
   ) : (
     questionsResults.map((row) => (
       <tr key={row._id}>
-        <td style={{ fontSize: "1rem", textAlign: "left" }}>
-          {questionsResults.indexOf(row) + 1}
-        </td>
-        <td
-          className={cx(classes.createdColumn)}
-          style={{ fontSize: "1rem", textAlign: "left" }}
-        >
+        <td style={{ fontSize: "1rem", textAlign: "left" }}>{questionsResults.indexOf(row) + 1}</td>
+        <td className={cx(classes.createdColumn)} style={{ fontSize: "1rem", textAlign: "left" }}>
           {/* {row.createdAt} */}
           {/* {new Date(row.createdAt).toLocaleDateString()} */}
           {new Date(row.createdAt).toLocaleString(undefined, {
@@ -106,11 +102,11 @@ const AllQuestions = ({ check, setCheck, answerData, setAnswerData }) => {
         >
           {row.questionLevel}
         </td>
-        <td
-          className={cx(classes.questionColumn)}
-          style={{ fontSize: "1rem", textAlign: "left" }}
-        >
+        <td className={cx(classes.questionColumn)} style={{ fontSize: "1rem", textAlign: "left" }}>
           {row.title}
+        </td>
+        <td className={cx(classes.questionColumn)} style={{ fontSize: "1rem", textAlign: "left" }}>
+          {row.question}
         </td>
         <td>
           <Center>
@@ -129,26 +125,45 @@ const AllQuestions = ({ check, setCheck, answerData, setAnswerData }) => {
   );
 
   return (
-    <div className={cx(classes.table)}>
-      <Table miw={700} highlightOnHover>
-        <thead className={cx(classes.header)}>
-          <tr>
-            <th style={{ fontSize: "1.1rem", textAlign: "left" }}>ID</th>
-            <th style={{ fontSize: "1.1rem", textAlign: "left" }}>
-              Created On
-            </th>
-            <th style={{ fontSize: "1.1rem", textAlign: "left" }}>
-              Question Level
-            </th>
-            <th style={{ fontSize: "1.1rem", textAlign: "left" }}>
-              Question Title
-            </th>
-            <th style={{ fontSize: "1.1rem", textAlign: "center" }}>Action</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>
-    </div>
+    <Paper my={"xs"} radius={"md"} p={"xs"}>
+      <div className={cx(classes.table)}>
+        <Table miw={700} highlightOnHover>
+          <thead className={cx(classes.header)}>
+            <tr>
+              <th style={{ fontSize: "1.1rem", textAlign: "left" }}>ID</th>
+              <th style={{ fontSize: "1.1rem", textAlign: "left" }}>Created On</th>
+              <th style={{ fontSize: "1.1rem", textAlign: "left" }}>Question Level</th>
+              <th style={{ fontSize: "1.1rem", textAlign: "left" }}>Question Title</th>
+              <th style={{ fontSize: "1.1rem", textAlign: "left" }}>Question</th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </Table>
+      </div>
+      {loading ? null : questionsResults?.length === 0 ? null : (
+        <Pagination
+          position="right"
+          pr={"xl"}
+          styles={(theme) => ({
+            control: {
+              "&[data-active]": {
+                backgroundImage: theme.fn.gradient({
+                  from: Colors.main,
+                  to: Colors.main,
+                }),
+              },
+            },
+            dots: {
+              color: Colors.secondary,
+            },
+          })}
+          mt={"xl"}
+          total={totalPages}
+          value={page}
+          onChange={setPage}
+        />
+      )}
+    </Paper>
   );
 };
 
