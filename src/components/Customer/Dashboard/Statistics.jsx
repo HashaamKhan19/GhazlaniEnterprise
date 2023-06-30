@@ -34,7 +34,7 @@ const Statistics = () => {
     {
       id: 1,
       label: "Attendance",
-      value: auth.user.attendancePercentage + "%",
+      value: auth.user?.attendancePercentage.toFixed(2) + "%",
       icon: BsPersonCheck,
     },
     {

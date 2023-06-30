@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Group, Select, SimpleGrid, Text } from "@mantine/core";
+import { ActionIcon, Button, Group, Paper, Select, SimpleGrid, Text } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import React, { useContext, useRef, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
@@ -250,9 +250,26 @@ const TimeTable = () => {
         marginTop: "1rem",
       }}
     >
+      {auth.user?.timeTable ? (
+        <Paper style={{ margin: "auto", width: "30%", padding: "10px" }}>
+          <div>
+            <Text style={{ textAlign: "left" }}>
+              <span style={{ fontSize: "18px", fontWeight: "bold" }}>Awake Time:</span>{" "}
+              {new Date(auth.user.timeTable.awake).toLocaleTimeString("en-us")}
+            </Text>
+            <Text style={{ textAlign: "left" }}>
+              <span style={{ fontSize: "18px", fontWeight: "bold" }}>Sleep Time:</span>{" "}
+              {new Date(auth.user.timeTable.sleep).toLocaleTimeString("en-us")}
+            </Text>
+          </div>
+        </Paper>
+      ) : (
+        <> </>
+      )}
+
       <Text
         style={{
-          textAlign: "center",
+          // textAlign: "center",
           fontSize: "1.8rem",
           color: Colors.white,
           marginBottom: "2rem",
