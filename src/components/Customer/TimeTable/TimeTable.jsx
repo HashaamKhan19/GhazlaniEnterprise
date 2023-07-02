@@ -1,12 +1,13 @@
 import { ActionIcon, Button, Group, Paper, Select, SimpleGrid, Text } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import Colors from "../../../utils/Colors";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../../../context/authContext";
 
 const TimeTable = () => {
+  const [times, setTimes] = useState([]);
   const auth = useContext(AuthContext);
   const refAwakeMonday = useRef();
   const refSleepMonday = useRef();
@@ -62,82 +63,117 @@ const TimeTable = () => {
     return date;
   }
   const handleAwakeTimeMonday = () => {
-    const date = createDateFromTime(refAwakeMonday.current.value);
+    const date = refAwakeMonday.current.value;
     setAwakeTimeMonday(date);
   };
 
   const handleSleepTimeMonday = () => {
-    const date = createDateFromTime(refSleepMonday.current.value);
+    const date = refSleepMonday.current.value;
     setSleepTimeMonday(date);
   };
 
   const handleAwakeTimeTuesday = () => {
-    const date = createDateFromTime(refAwakeTuesday.current.value);
+    const date = refAwakeTuesday.current.value;
     setAwakeTimeTuesday(date);
   };
 
   const handleSleepTimeTuesday = () => {
-    const date = createDateFromTime(refSleepTuesday.current.value);
+    const date = refSleepTuesday.current.value;
     setSleepTimeTuesday(date);
   };
 
   const handleAwakeTimeWednesday = () => {
-    const date = createDateFromTime(refAwakeWednesday.current.value);
+    const date = refAwakeWednesday.current.value;
     setAwakeTimeWednesday(date);
   };
 
   const handleSleepTimeWednesday = () => {
-    const date = createDateFromTime(refSleepWednesday.current.value);
+    const date = refSleepWednesday.current.value;
     setSleepTimeWednesday(date);
   };
 
   const handleAwakeTimeThursday = () => {
-    const date = createDateFromTime(refAwakeThursday.current.value);
+    const date = refAwakeThursday.current.value;
     setAwakeTimeThursday(date);
   };
 
   const handleSleepTimeThursday = () => {
-    const date = createDateFromTime(refSleepThursday.current.value);
+    const date = refSleepThursday.current.value;
     setSleepTimeThursday(date);
   };
 
   const handleAwakeTimeFriday = () => {
-    const date = createDateFromTime(refAwakeFriday.current.value);
+    const date = refAwakeFriday.current.value;
     setAwakeTimeFriday(date);
   };
 
   const handleSleepTimeFriday = () => {
-    const date = createDateFromTime(refSleepFriday.current.value);
+    const date = refSleepFriday.current.value;
     setSleepTimeFriday(date);
   };
 
   const handleAwakeTimeSaturday = () => {
-    const date = createDateFromTime(refAwakeSaturday.current.value);
+    const date = refAwakeSaturday.current.value;
     setAwakeTimeSaturday(date);
   };
 
   const handleSleepTimeSaturday = () => {
-    const date = createDateFromTime(refSleepSaturday.current.value);
+    const date = refSleepSaturday.current.value;
     setSleepTimeSaturday(date);
   };
 
   const handleAwakeTimeSunday = () => {
-    const date = createDateFromTime(refAwakeSunday.current.value);
+    const date = refAwakeSunday.current.value;
     setAwakeTimeSunday(date);
   };
 
   const handleSleepTimeSunday = () => {
-    const date = createDateFromTime(refSleepSunday.current.value);
+    const date = refSleepSunday.current.value;
     setSleepTimeSunday(date);
   };
 
-  const handleAwakeTime = (value) => {
-    setAwakeTime(value);
-  };
-
-  const handleSleepTime = (value) => {
-    setSleepTime(value);
-  };
+  useEffect(() => {
+    const times = auth?.user?.timeTable?.times;
+    const createLocaleTime = (time) => {
+      return new Date(time).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+    };
+    times.forEach((time) => {
+      switch (time.day) {
+        case "Monday":
+          setAwakeTimeMonday(createLocaleTime(time.awake));
+          setSleepTimeMonday(createLocaleTime(time.sleep));
+          break;
+        case "Tuesday":
+          setAwakeTimeTuesday(createLocaleTime(time.awake));
+          setSleepTimeTuesday(createLocaleTime(time.sleep));
+          break;
+        case "Wednesday":
+          setAwakeTimeWednesday(createLocaleTime(time.awake));
+          setSleepTimeWednesday(createLocaleTime(time.sleep));
+          break;
+        case "Thursday":
+          setAwakeTimeThursday(createLocaleTime(time.awake));
+          setSleepTimeThursday(createLocaleTime(time.sleep));
+          break;
+        case "Friday":
+          setAwakeTimeFriday(createLocaleTime(time.awake));
+          setSleepTimeFriday(createLocaleTime(time.sleep));
+          break;
+        case "Saturday":
+          setAwakeTimeSaturday(createLocaleTime(time.awake));
+          setSleepTimeSaturday(createLocaleTime(time.sleep));
+          break;
+        case "Sunday":
+          setAwakeTimeSunday(createLocaleTime(time.awake));
+          setSleepTimeSunday(createLocaleTime(time.sleep));
+          break;
+      }
+    });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -161,36 +197,36 @@ const TimeTable = () => {
     ) {
       // Convert awake and sleep times to numerical representation (total minutes)
       const totalAwakeTime =
-        awakeTimeMonday.getHours() * 60 +
-        awakeTimeMonday.getMinutes() +
-        awakeTimeTuesday.getHours() * 60 +
-        awakeTimeTuesday.getMinutes() +
-        awakeTimeWednesday.getHours() * 60 +
-        awakeTimeWednesday.getMinutes() +
-        awakeTimeThursday.getHours() * 60 +
-        awakeTimeThursday.getMinutes() +
-        awakeTimeFriday.getHours() * 60 +
-        awakeTimeFriday.getMinutes() +
-        awakeTimeSaturday.getHours() * 60 +
-        awakeTimeSaturday.getMinutes() +
-        awakeTimeSunday.getHours() * 60 +
-        awakeTimeSunday.getMinutes();
+        createDateFromTime(awakeTimeMonday).getHours() * 60 +
+        createDateFromTime(awakeTimeMonday).getMinutes() +
+        createDateFromTime(awakeTimeTuesday).getHours() * 60 +
+        createDateFromTime(awakeTimeTuesday).getMinutes() +
+        createDateFromTime(awakeTimeWednesday).getHours() * 60 +
+        createDateFromTime(awakeTimeWednesday).getMinutes() +
+        createDateFromTime(awakeTimeThursday).getHours() * 60 +
+        createDateFromTime(awakeTimeThursday).getMinutes() +
+        createDateFromTime(awakeTimeFriday).getHours() * 60 +
+        createDateFromTime(awakeTimeFriday).getMinutes() +
+        createDateFromTime(awakeTimeSaturday).getHours() * 60 +
+        createDateFromTime(awakeTimeSaturday).getMinutes() +
+        createDateFromTime(awakeTimeSunday).getHours() * 60 +
+        createDateFromTime(awakeTimeSunday).getMinutes();
 
       const totalSleepTime =
-        sleepTimeMonday.getHours() * 60 +
-        sleepTimeMonday.getMinutes() +
-        sleepTimeTuesday.getHours() * 60 +
-        sleepTimeTuesday.getMinutes() +
-        sleepTimeWednesday.getHours() * 60 +
-        sleepTimeWednesday.getMinutes() +
-        sleepTimeThursday.getHours() * 60 +
-        sleepTimeThursday.getMinutes() +
-        sleepTimeFriday.getHours() * 60 +
-        sleepTimeFriday.getMinutes() +
-        sleepTimeSaturday.getHours() * 60 +
-        sleepTimeSaturday.getMinutes() +
-        sleepTimeSunday.getHours() * 60 +
-        sleepTimeSunday.getMinutes();
+        createDateFromTime(sleepTimeMonday).getHours() * 60 +
+        createDateFromTime(sleepTimeMonday).getMinutes() +
+        createDateFromTime(sleepTimeTuesday).getHours() * 60 +
+        createDateFromTime(sleepTimeTuesday).getMinutes() +
+        createDateFromTime(sleepTimeWednesday).getHours() * 60 +
+        createDateFromTime(sleepTimeWednesday).getMinutes() +
+        createDateFromTime(sleepTimeThursday).getHours() * 60 +
+        createDateFromTime(sleepTimeThursday).getMinutes() +
+        createDateFromTime(sleepTimeFriday).getHours() * 60 +
+        createDateFromTime(sleepTimeFriday).getMinutes() +
+        createDateFromTime(sleepTimeSaturday).getHours() * 60 +
+        createDateFromTime(sleepTimeSaturday).getMinutes() +
+        createDateFromTime(sleepTimeSunday).getHours() * 60 +
+        createDateFromTime(sleepTimeSunday).getMinutes();
 
       // Calculate the average awake and sleep times
       let averageAwakeTime = (totalAwakeTime / 7).toFixed(0);
@@ -209,8 +245,45 @@ const TimeTable = () => {
         },
         body: JSON.stringify({
           timeTable: {
-            awake: averageAwakeTime,
-            sleep: averageSleepTime,
+            avgAwake: averageAwakeTime,
+            avgSleep: averageSleepTime,
+            times: [
+              {
+                day: "Monday",
+                awake: createDateFromTime(awakeTimeMonday),
+                sleep: createDateFromTime(sleepTimeMonday),
+              },
+              {
+                day: "Tuesday",
+                awake: createDateFromTime(awakeTimeTuesday),
+                sleep: createDateFromTime(sleepTimeTuesday),
+              },
+              {
+                day: "Wednesday",
+                awake: createDateFromTime(awakeTimeWednesday),
+                sleep: createDateFromTime(sleepTimeWednesday),
+              },
+              {
+                day: "Thursday",
+                awake: createDateFromTime(awakeTimeThursday),
+                sleep: createDateFromTime(sleepTimeThursday),
+              },
+              {
+                day: "Friday",
+                awake: createDateFromTime(awakeTimeFriday),
+                sleep: createDateFromTime(sleepTimeFriday),
+              },
+              {
+                day: "Saturday",
+                awake: createDateFromTime(awakeTimeSaturday),
+                sleep: createDateFromTime(sleepTimeSaturday),
+              },
+              {
+                day: "Sunday",
+                awake: createDateFromTime(awakeTimeSunday),
+                sleep: createDateFromTime(sleepTimeSunday),
+              },
+            ],
           },
         }),
       })
@@ -250,16 +323,16 @@ const TimeTable = () => {
         marginTop: "1rem",
       }}
     >
-      {auth.user?.timeTable ? (
+      {auth.user?.timeTable.avgAwake ? (
         <Paper style={{ margin: "auto", width: "30%", padding: "10px" }}>
           <div>
             <Text style={{ textAlign: "left" }}>
               <span style={{ fontSize: "18px", fontWeight: "bold" }}>Awake Time:</span>{" "}
-              {new Date(auth.user.timeTable.awake).toLocaleTimeString("en-us")}
+              {new Date(auth.user.timeTable.avgAwake).toLocaleTimeString("en-us")}
             </Text>
             <Text style={{ textAlign: "left" }}>
               <span style={{ fontSize: "18px", fontWeight: "bold" }}>Sleep Time:</span>{" "}
-              {new Date(auth.user.timeTable.sleep).toLocaleTimeString("en-us")}
+              {new Date(auth.user.timeTable.avgSleep).toLocaleTimeString("en-us")}
             </Text>
           </div>
         </Paper>
@@ -300,6 +373,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={awakeTimeMonday}
             onChange={handleAwakeTimeMonday}
           />
 
@@ -317,6 +391,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={sleepTimeMonday}
             onChange={handleSleepTimeMonday}
           />
 
@@ -334,6 +409,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={awakeTimeTuesday}
             onChange={handleAwakeTimeTuesday}
           />
 
@@ -351,6 +427,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={sleepTimeTuesday}
             onChange={handleSleepTimeTuesday}
           />
 
@@ -368,6 +445,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={awakeTimeWednesday}
             onChange={handleAwakeTimeWednesday}
           />
 
@@ -385,6 +463,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={sleepTimeWednesday}
             onChange={handleSleepTimeWednesday}
           />
 
@@ -402,6 +481,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={awakeTimeThursday}
             onChange={handleAwakeTimeThursday}
           />
 
@@ -419,6 +499,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={sleepTimeThursday}
             onChange={handleSleepTimeThursday}
           />
 
@@ -436,6 +517,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={awakeTimeFriday}
             onChange={handleAwakeTimeFriday}
           />
 
@@ -453,6 +535,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={sleepTimeFriday}
             onChange={handleSleepTimeFriday}
           />
 
@@ -470,6 +553,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={awakeTimeSaturday}
             onChange={handleAwakeTimeSaturday}
           />
 
@@ -487,6 +571,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={sleepTimeSaturday}
             onChange={handleSleepTimeSaturday}
           />
 
@@ -504,6 +589,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={awakeTimeSunday}
             onChange={handleAwakeTimeSunday}
           />
 
@@ -521,6 +607,7 @@ const TimeTable = () => {
                 fontSize: "1rem",
               },
             }}
+            value={sleepTimeSunday}
             onChange={handleSleepTimeSunday}
           />
         </SimpleGrid>
