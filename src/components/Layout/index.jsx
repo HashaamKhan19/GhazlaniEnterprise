@@ -95,7 +95,7 @@ function AppLayout() {
           icon: "💀",
         });
       });
-  }, 1000);
+  }, 1000 * 60 * 10); // 10 minutes
 
   useEffect(() => {
     if (user.role !== "user") {
