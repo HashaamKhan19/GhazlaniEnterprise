@@ -9,6 +9,7 @@ import UserProfileDetails from "./components/Generic/UserProfileDetails";
 import AdminLayout from "./components/admin/Dashboard/index";
 import ChangePassword from "./components/auth/ChangePassword";
 import Results from "./components/admin/Questions/Results";
+import Paypal from "./components/Generic/Paypal";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/resetPassword" element={<ForgotPassword />} />
         <Route element={<RequireAuth />}>
           <Route path="/" element={<AppLayout />} />
+          <Route path="/paypal" element={<Paypal />} />
           <Route path="/userDetails" element={<UserProfileDetails />} />
           <Route path="/admin" element={<AdminLayout />} />
           <Route path="/changePassword" element={<ChangePassword />} />
