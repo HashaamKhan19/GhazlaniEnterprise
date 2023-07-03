@@ -9,7 +9,7 @@ const Questions = () => {
   const [question, setQuestion] = React.useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3000/api/questions", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/questions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

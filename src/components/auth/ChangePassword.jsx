@@ -44,20 +44,18 @@ export default function ChangePassword() {
     formData.append("passwordConfirm", passwordConfirmRef.current.value);
 
     axios
-      .patch("http://localhost:3000/api/users/updatePassword", formData, {
+      .patch(`${import.meta.env.VITE_BACKEND_URL}/api/users/updatePassword`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         toast.success("Password Updated Successfully");
         navigate("/login");
         localStorage.clear();
       })
       .catch((err) => {
-        console.log(err.response.data);
         setLoading(false);
         toast.error(err.response.data.message);
       });

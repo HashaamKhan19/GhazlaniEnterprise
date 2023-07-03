@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [attendanceArray, setAttendanceArray] = useState([]);
   const auth = useContext(AuthContext);
   useEffect(() => {
-    fetch("http://localhost:3000/api/users/monthlyAttendance/2023", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/monthlyAttendance/2023`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

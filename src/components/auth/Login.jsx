@@ -34,15 +34,12 @@ export default function Login() {
     }
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:3000/api/users/login", {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users/login`, {
         email,
         password,
       });
 
-      console.log(response);
-
       if (response?.data?.status === "success") {
-        console.log("response: ", response);
         localStorage.setItem("token", response?.data?.token);
         localStorage.setItem("userType", response?.data?.data?.user?.role);
         localStorage.setItem("id", response?.data?.data?.user?._id);
@@ -67,7 +64,6 @@ export default function Login() {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
       setError(error.response.data.message);
       toast.error("Invalid email or password", {
         position: "top-center",

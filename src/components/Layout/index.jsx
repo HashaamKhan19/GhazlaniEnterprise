@@ -38,9 +38,8 @@ function AppLayout() {
     }
   }
   const interval = useInterval(() => {
-    console.log(interval);
     if (!isFetching) return;
-    fetch(`http://localhost:3000/api/questions/dailyQuestion/${user.currentLevel}`, {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/questions/dailyQuestion/${user.currentLevel}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -86,8 +85,6 @@ function AppLayout() {
             ];
           }
         });
-        // setIsLoading(false);
-        console.log(data?.data?.question);
       })
       .catch((err) => {
         toast.error(err.message, {

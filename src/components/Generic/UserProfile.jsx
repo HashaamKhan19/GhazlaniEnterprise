@@ -9,6 +9,7 @@ import { AuthContext } from "../../context/authContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineLock } from "react-icons/ai";
+import { toast } from "react-hot-toast";
 
 const UserProfile = () => {
   const match768 = useMediaQuery("(max-width: 768px)");
@@ -22,14 +23,16 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/users/me", {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setUserData(response?.data?.data?.user);
       } catch (error) {
-        console.log("error: ", error);
+        toast.error(error.message, {
+          position: "top-center",
+        });
       }
     };
     fetchUserData();

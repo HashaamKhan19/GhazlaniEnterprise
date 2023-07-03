@@ -59,7 +59,6 @@ const TimeTable = () => {
     const date = new Date();
     date.setHours(parseInt(hoursStr, 10));
     date.setMinutes(parseInt(minutesStr, 10));
-    console.log(date);
     return date;
   }
   const handleAwakeTimeMonday = () => {
@@ -237,7 +236,7 @@ const TimeTable = () => {
       averageSleepTime = createDateFromTime(formatTime(averageSleepTime));
 
       // update the user's data in the database
-      fetch("http://localhost:3000/api/users/updateMe", {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/updateMe`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -289,7 +288,6 @@ const TimeTable = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           localStorage.setItem("user", JSON.stringify(data?.data?.user));
           auth.setUser(data?.data?.user);
           toast.success("Time Table updated successfully!", {

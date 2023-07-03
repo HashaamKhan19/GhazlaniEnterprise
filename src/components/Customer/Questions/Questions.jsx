@@ -15,12 +15,15 @@ const Questions = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/questions/dailyQuestion/${auth.user.currentLevel}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-      },
-    })
+    fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/questions/dailyQuestion/${auth.user.currentLevel}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      }
+    )
       .then((res) => {
         return res.json();
       })
@@ -41,7 +44,7 @@ const Questions = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3000/api/users/markAttendance", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/markAttendance`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${auth.token}`,
@@ -62,7 +65,6 @@ const Questions = () => {
         }
       })
       .then((data) => {
-        console.log(data);
         localStorage.setItem("user", JSON.stringify(data?.data?.user));
         auth.setUser(data?.data?.user);
         toast.success(data?.message || "Answer submitted successfully!", {

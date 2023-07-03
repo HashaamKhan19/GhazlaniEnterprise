@@ -60,7 +60,7 @@ export default function AllUsers() {
     const fetchData = async () => {
       setLoading(true);
       const result = await axios.get(
-        `http://localhost:3000/api/users?limit=${limit}&page=${page}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/users?limit=${limit}&page=${page}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

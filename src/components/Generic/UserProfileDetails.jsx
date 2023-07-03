@@ -29,8 +29,7 @@ const UserProfileDetails = () => {
       return;
     }
 
-    const emailRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
     const isValidEmail = emailRegex.test(email);
 
@@ -44,7 +43,7 @@ const UserProfileDetails = () => {
 
     try {
       const response = await axios.patch(
-        `http://localhost:3000/api/users/updateMe`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/updateMe`,
         {
           name,
           email,
@@ -57,7 +56,6 @@ const UserProfileDetails = () => {
       );
 
       if (response?.data?.status === "success") {
-        console.log("response: ", response);
         toast.success("Profile updated successfully", {
           position: "top-center",
         });
@@ -72,7 +70,6 @@ const UserProfileDetails = () => {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.message, {
         position: "top-center",
       });

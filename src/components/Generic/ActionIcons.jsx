@@ -1,14 +1,4 @@
-import {
-  ActionIcon,
-  Button,
-  Center,
-  Group,
-  Loader,
-  Menu,
-  Modal,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Button, Center, Group, Loader, Menu, Modal, Stack, Text } from "@mantine/core";
 import React from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { AiOutlineEye } from "react-icons/ai";
@@ -31,27 +21,20 @@ const ActionIcons = ({
   role,
 }) => {
   const [deleteOpened, { open: deleteOpen, close }] = useDisclosure(false);
-  const [viewOpened, { open: viewOpen, close: viewClose }] =
-    useDisclosure(false);
+  const [viewOpened, { open: viewOpen, close: viewClose }] = useDisclosure(false);
   const [loading, setLoading] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
 
   async function handleDelete() {
     setLoading(true);
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/users/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      console.log(response);
+      const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
       if (response?.status === 204) {
-        console.log("response: ", response);
         toast.success("User deleted successfully", {
           position: "top-center",
         });
@@ -65,7 +48,6 @@ const ActionIcons = ({
         close();
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.message, {
         position: "top-center",
       });
@@ -78,7 +60,7 @@ const ActionIcons = ({
     setLoading2(true);
     try {
       const response = await axios.patch(
-        `http://localhost:3000/api/users/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`,
         {
           blocked: !blocked,
         },
@@ -90,7 +72,6 @@ const ActionIcons = ({
       );
 
       if (response?.data?.status === "success") {
-        console.log("response: ", response);
         toast.success("User updated successfully", {
           position: "top-center",
         });
@@ -102,7 +83,6 @@ const ActionIcons = ({
         setLoading2(false);
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.message, {
         position: "top-center",
       });
@@ -119,11 +99,7 @@ const ActionIcons = ({
               variant="outline"
               compact
               radius={"xl"}
-              style={
-                blocked
-                  ? { borderColor: Colors.red }
-                  : { borderColor: Colors.secondary }
-              }
+              style={blocked ? { borderColor: Colors.red } : { borderColor: Colors.secondary }}
               c={blocked ? Colors.red : Colors.secondary}
             >
               {blocked ? "Blocked" : "Active"}
@@ -185,8 +161,8 @@ const ActionIcons = ({
         ) : (
           <>
             <Text c={Colors.black} fw={500}>
-              Are you sure you want to delete this user? This action is
-              permanent and cannot be undone.
+              Are you sure you want to delete this user? This action is permanent and cannot be
+              undone.
             </Text>
             <Group mt={"md"} position="right">
               <Button onClick={close} color="dark">
@@ -226,12 +202,10 @@ const ActionIcons = ({
       >
         <Stack align="center">
           <Text c={Colors.black} fw={600} size={"lg"}>
-            Name:{" "}
-            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{name}</span>
+            Name: <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{name}</span>
           </Text>
           <Text c={Colors.black} fw={600} size={"lg"}>
-            Email:{" "}
-            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{email}</span>
+            Email: <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{email}</span>
           </Text>
           <Text c={Colors.black} fw={600} size={"lg"}>
             Attendance:{" "}
@@ -241,9 +215,7 @@ const ActionIcons = ({
           </Text>
           <Text c={Colors.black} fw={600} size={"lg"}>
             Account Level:{" "}
-            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>
-              {currentLevel}
-            </span>
+            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{currentLevel}</span>
           </Text>
           <Text c={Colors.black} fw={600} size={"lg"}>
             Account Status:{" "}
@@ -252,8 +224,7 @@ const ActionIcons = ({
             </span>
           </Text>
           <Text c={Colors.black} fw={600} size={"lg"}>
-            Role:{" "}
-            <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{role}</span>
+            Role: <span style={{ fontWeight: 400, marginLeft: "1rem" }}>{role}</span>
           </Text>
         </Stack>
       </Modal>

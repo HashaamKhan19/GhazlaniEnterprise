@@ -52,8 +52,7 @@ export default function SignUp() {
       return;
     }
 
-    const emailRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
     if (!emailRegex.test(emailRef.current.value)) {
       toast.error("Please enter a valid email");
@@ -76,19 +75,17 @@ export default function SignUp() {
     formData.append("image", image);
 
     axios
-      .post("http://localhost:3000/api/users/signup", formData, {
+      .post(`${import.meta.env.VITE_BACKEND_URL}/api/users/signup`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         toast.success("Account created successfully");
         navigate("/login");
       })
       .catch((err) => {
-        console.log(err.response.data);
         setLoading(false);
         toast.error(err.response.data.message);
       });
